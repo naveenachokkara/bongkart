@@ -1,0 +1,201 @@
+<style>
+    btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        background: white;
+        cursor: inherit;
+        display: block;
+    }
+
+</style>
+
+<form class="form-horizontal" name="bongForm" ng-submit="Bong.saveBong(bongForm.$valid)" novalidate>
+    <fieldset>
+        <legend>Bang Create</legend>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Primary Information</div>
+            <div class="panel-body">
+
+                <div class="form-group" ng-class="{ 'has-error' : bongForm.title.$invalid && !bongForm.title.$pristine }">
+                    <label for="inputtitle" class="col-lg-2 control-label">Title</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="inputtitle" placeholder="Title" name="title" ng-model="Bong.bongData.title" required>
+                        <p ng-show="bongForm.title.$invalid && !bongForm.title.$pristine" class="help-block">Title is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : bongForm.price.$invalid && !bongForm.price.$pristine }">
+                    <label for="inputprice" class="col-lg-2 control-label">Price</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="inputprice" placeholder="Price" name="price" ng-model="Bong.bongData.price" required>
+                        <p ng-show="bongForm.price.$invalid && !bongForm.price.$pristine" class="help-block">Price is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : bongForm.originalPrice.$invalid && !bongForm.originalPrice.$pristine }">
+                    <label for="inputoriginalPrice" class="col-lg-2 control-label">Original Price</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="inputoriginalPrice" placeholder="Original Price" name="originalPrice" ng-model="Bong.bongData.originalPrice" required>
+                        <p ng-show="bongForm.originalPrice.$invalid && !bongForm.originalPrice.$pristine" class="help-block">Original Price is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : bongForm.description.$invalid && !bongForm.description.$pristine }">
+                    <label  class="col-lg-2 control-label">Description</label>
+                    <div class="col-lg-10">
+                        <textarea class="form-control"  placeholder="Description" name="description" ng-model="Bong.bongData.description" required></textarea>
+                        <p ng-show="bongForm.description.$invalid && !bongForm.description.$pristine" class="help-block">Description is required.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Specifications</div>
+            <div class="panel-body">
+
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">General</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group" ng-class="{ 'has-error' : bongForm.brand.$invalid && !bongForm.brand.$pristine }">
+                            <label for="inputBrand" class="col-lg-2 control-label">Brand</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputBrand" placeholder="Brand" name="brand" ng-model="Bong.bongData.brand" required>
+                                <p ng-show="bongForm.brand.$invalid && !bongForm.brand.$pristine" class="help-block">Bong brand is required.</p>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error' : bongForm.modelNumber.$invalid && !bongForm.modelNumber.$pristine }">
+                            <label for="inputmodelnumber" class="col-lg-2 control-label">Model Number</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputmodelnumber" placeholder="Model Number" name="modelNumber" ng-model="Bong.bongData.modalNumber" required>
+                                <p ng-show="bongForm.modelNumber.$invalid && !bongForm.modelNumber.$pristine" class="help-block">Model number is required.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error' : bongForm.functionType.$invalid && !bongForm.functionType.$pristine }">
+                            <label for="inputfunctionype" class="col-lg-2 control-label">Function Type</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputfunctionype" placeholder="Function Type" name="functionType" ng-model="Bong.bongData.functionType" required>
+                                <p ng-show="bongForm.functionType.$invalid && !bongForm.functionType.$pristine" class="help-block">Function Type is required.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error' : bongForm.material.$invalid && !bongForm.material.$pristine }">
+                            <label for="inputmaterial" class="col-lg-2 control-label">Material</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputmaterial" placeholder="Material" name="material" ng-model="Bong.bongData.material" required>
+                                <p ng-show="bongForm.material.$invalid && !bongForm.material.$pristine" class="help-block">Material is required.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error' : bongForm.color.$invalid && !bongForm.color.$pristine }">
+                            <label for="inputcolor" class="col-lg-2 control-label">Color</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputcolor" placeholder="Color" name="color" ng-model="Bong.bongData.color" required>
+                                <p ng-show="bongForm.color.$invalid && !bongForm.color.$pristine" class="help-block">Color is required.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Dimensions</h3>
+                    </div>
+                    <div class="panel-body">
+
+
+                        <div class="form-group" ng-class="{ 'has-error' : bongForm.jointSize.$invalid && !bongForm.jointSize.$pristine }">
+                            <label for="inputjointsize" class="col-lg-2 control-label">Joint Size</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputjointsize" placeholder="Joint Size" name="jointSize" ng-model="Bong.bongData.jointSize" required>
+                                <p ng-show="bongForm.jointSize.$invalid && !bongForm.jointSize.$pristine" class="help-block">Joint Size is required.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error' : bongForm.height.$invalid && !bongForm.height.$pristine }">
+                            <label for="inputjointsize" class="col-lg-2 control-label">Height</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputheight" placeholder="Height" name="height" ng-model="Bong.bongData.height" required>
+                                <p ng-show="bongForm.height.$invalid && !bongForm.height.$pristine" class="help-block">Height is required.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error' : bongForm.diameter.$invalid && !bongForm.diameter.$pristine }">
+                            <label for="inputdiameter" class="col-lg-2 control-label">Diameter</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputdiameter" placeholder="Diameter" name="diameter" ng-model="Bong.bongData.diameter" required>
+                                <p ng-show="bongForm.diameter.$invalid && !bongForm.diameter.$pristine" class="help-block">Diameter is required.</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Image Upload</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Image1</label>
+                            <div class="col-lg-10">
+                                <label class="btn btn-default btn-file">
+                                    Browse <input type="file" hidden>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Image2</label>
+                            <div class="col-lg-10">
+                                <label class="btn btn-default btn-file">
+                                    Browse <input type="file" hidden>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Image3</label>
+                            <div class="col-lg-10">
+                                <label class="btn btn-default btn-file">
+                                    Browse <input type="file" hidden>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
