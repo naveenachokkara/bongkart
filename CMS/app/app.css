@@ -33,21 +33,23 @@
     	margin: 10px 0px;
     }
 
-/*input[type=text] {
-    width: 170px;
-    box-sizing: border-box;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
-    background-image: url('searchicon.png');
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    padding: 5px 5px 5px 40px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
+/* expanding input CSS only */
+#myInput {
+	 position:relative;
+  width:230px;
+  -webkit-transition: width 0.4s ease-in-out;
+   transition: width 0.4s ease-in-out;
 }
+#myInput:focus	{
+  width:100%;
+  -webkit-transition:width 0.5s ease-in-out;
+}
+.myIm{
+	position: absolute;
+	padding: 20px;
+    border-radius: 30px;
+   left: -25px;
+   color:#e5e5ef;
+   font-size:17px;
 
-input[type=text]:focus {
-    width: 100%;
 }
-*/
