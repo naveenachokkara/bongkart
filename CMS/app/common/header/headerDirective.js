@@ -8,7 +8,8 @@ Header.$inject = [];
 
 function Header(){
      return {
-         templateUrl:'common/header/header.html'
+         templateUrl:'common/header/header.html',
+         replace:true
      }
 
 }
