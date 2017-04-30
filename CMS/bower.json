@@ -15,5 +15,8 @@
     "bootstrap": "^3.3.7",
     "underscore": "^1.8.3",
     "bower-bootswatch-paper": "paper-less#*"
+  },
+  "devDependencies": {
+    "angular-file-upload": "^2.5.0"
   }
 }

@@ -29,6 +29,5 @@
   },
   "_source": "https://github.com/gintsgints/bower-bootswatch-paper.git",
   "_target": "*",
-  "_originalSource": "paper-less",
-  "_direct": true
+  "_originalSource": "paper-less"
 }

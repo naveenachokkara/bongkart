@@ -1,6 +1,9 @@
 /**
  * Created by komarthi on 26/3/17.
  */
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('bongKart.bong',[]);
+    angular.module('bongKart.bong', []);
+
+})();

@@ -9,33 +9,36 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-xs-12">
-                <table class="table table-striped table-hover ">
+                <table class="table table-striped table-hover table-responsive">
                     <thead>
                     <tr>
                         <th>#</th>
                         <th>Brand</th>
-                        <th>Name</th>
+                        <th>Title</th>
                         <th>Image</th>
                         <th>Price</th>
-                        <th>Status</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
+                    <tr ng-repeat="bong in Bong.bongs">
+                        <td>{{$index + 1}}</td>
+                        <td>{{bong.brand}}</td>
+                        <td style="width: 20%">{{bong.title}}</td>
+                        <td style="width: 10%">
+                            <ul class="list-group">
+                                <li ng-repeat="image in bong.images" class="list-group-item">
+                                    <img ng-src="http://localhost:9000/uploads/{{image.file.name}}" class="img-thumbnail" alt="Cinque Terre">
+                                </li>
+                            </ul>
+                        </td>
+                        <td>{{bong.price}}</td>
+                        <td>{{bong.quantity}}</td>
+                        <td>
+                            <a href=""><i class="fa fa-pencil-square-o" aria-hidden="true" style="text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>&nbsp;&nbsp;&nbsp;
+                            <a href=""><i class="fa fa-trash" aria-hidden="true" style="color: red;text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

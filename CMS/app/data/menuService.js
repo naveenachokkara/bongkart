@@ -1,28 +1,30 @@
 /**
  * Created by komarthi on 25/3/17.
  */
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('bongKart')
-  .service('MenuService',MenuService);
+    angular.module('bongKart')
+        .service('MenuService', MenuService);
 
-MenuService.$inject = [];
+    MenuService.$inject = [];
 
-function MenuService(){
-    this.items = items;
+    function MenuService() {
+        this.items = items;
 
-    function items(){
-        var items = [{
-                name:'Bong',
-                subMenuItems:[{
-                    name:'View All',
-                    url:'cms.bongs'
-                },{
-                    name:'Add New',
-                    url:'cms.bong_create'
+        function items() {
+            var items = [{
+                name: 'Bong',
+                subMenuItems: [{
+                    name: 'View All',
+                    url: 'cms.bongs'
+                }, {
+                    name: 'Add New',
+                    url: 'cms.bong_create'
                 }]
             }];
 
-      return items;
+            return items;
+        }
     }
-}
+})();

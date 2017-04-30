@@ -16,7 +16,7 @@ const BongSchema = mongoose.Schema({
     "description":{
         type:String
     },
-    "band":{
+    "brand":{
         type:String
     },
     "modelNumber":{
@@ -34,11 +34,17 @@ const BongSchema = mongoose.Schema({
     "jointSize":{
         type:Number
     },
+    "diameter":{
+        type:Number
+    },
     "height":{
         type:Number
     },
-    "Images":{
+    "images":{
         type:Array
+    },
+    "quantity":{
+        type:Number
     }
 });
 
