@@ -1,0 +1,42 @@
+
+<div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">{{ Bong.pageName }}</h3>
+        <div class="pull-right">
+            <a ui-sref="cms.user_create" class="btn btn-primary">Add New</a>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-striped table-hover table-responsive">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in User.users">
+                        <td>{{$index + 1}}</td>
+                        <td>{{user.userName}}</td>
+                        <td style="width: 20%">{{user.email}}</td>
+                        <td>{{user.phoneNumber}}</td>
+                        <td>{{user.role}}</td>
+                        <td>
+                            <a ui-sref="cms.user_update({id:user._id})"><i class="fa fa-pencil-square-o" aria-hidden="true" style="text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>&nbsp;&nbsp;&nbsp;
+                            <a  ng-click="User.confirmDelete(user)" style="cursor: pointer" data-toggle="modal"><i class="fa fa-trash" aria-hidden="true" style="color: red;text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,9 +1,10 @@
 /**
  * Created by SESA435400 on 5/1/2017.
  */
+'use strict';
 const express = require('express');
 const router = express.Router();
-const user = require('./models/user');
+const user = require('../models/user');
 
 router.post('/create',(req,res,next) => {
     let newUser = new user(req.body);

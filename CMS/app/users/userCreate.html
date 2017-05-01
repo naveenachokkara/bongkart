@@ -1,0 +1,109 @@
+<style>
+    .full button span {
+        background-color: limegreen;
+        border-radius: 32px;
+        color: black;
+    }
+    .partially button span {
+        background-color: orange;
+        border-radius: 32px;
+        color: black;
+    }
+
+</style>
+
+<form class="form-horizontal" name="userForm" ng-submit="User.saveUser(userForm.$valid)" novalidate>
+    <fieldset>
+        <legend>User Create</legend>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Primary Information</div>
+            <div class="panel-body">
+
+                <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && !userForm.username.$pristine }">
+                    <label for="inputtitle" class="col-lg-2 control-label">User Name</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="inputtitle" placeholder="User Name" name="username" ng-model="User.userData.userName" required>
+                        <p ng-show="userForm.username.$invalid && !userForm.username.$pristine" class="help-block">user name is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : userForm.facebookId.$invalid && !userForm.facebookId.$pristine }">
+                    <label for="inputtitle" class="col-lg-2 control-label">Facebook Id</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="inputfacebookId" placeholder="Facebook Id" name="facebookId" ng-model="User.userData.facebookId" required>
+                        <p ng-show="userForm.facebookId.$invalid && !userForm.facebookId.$pristine" class="help-block">Facebook Id is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
+                    <label for="inputprice" class="col-lg-2 control-label">Email</label>
+                    <div class="col-lg-10">
+                        <input type="email" class="form-control" id="inputprice" placeholder="email" name="email" ng-model="User.userData.email" required>
+                        <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">email is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : userForm.phoneNumber.$invalid && !userForm.phoneNumber.$pristine }">
+                    <label for="inputoriginalPrice" class="col-lg-2 control-label">Phone Number</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="inputoriginalPrice" placeholder="Phone Number" name="phoneNumber" ng-model="User.userData.phoneNumber" required>
+                        <p ng-show="userForm.phoneNumber.$invalid && !userForm.phoneNumber.$pristine" class="help-block">Phone Number is required.</p>
+                    </div>
+                </div>
+
+
+                <div class="form-group" ng-class="{ 'has-error' : userForm.gender.$invalid && !userForm.gender.$pristine }">
+                    <label class="col-lg-2 control-label">Gender</label>
+                    <div class="col-lg-10">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="gender" id="optionsRadios1" value="male" ng-model="User.userData.gender">
+                                Male
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="gender" id="optionsRadios2" value="female" ng-model="User.userData.gender">
+                                Female
+                            </label>
+                        </div>
+                        <p ng-show="userForm.gender.$invalid && !userForm.gender.$pristine" class="help-block">Gender is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : userForm.role.$invalid && !userForm.role.$pristine }">
+                    <label for="inputoriginalPrice" class="col-lg-2 control-label">Role</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="inputrole" placeholder="Role" name="role" ng-model="User.userData.role" required>
+                        <p ng-show="userForm.role.$invalid && !userForm.role.$pristine" class="help-block">Role is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{ 'has-error' : userForm.dateOfBirth.$invalid && !userForm.dateOfBirth.$pristine }">
+                    <label for="inputoriginalPrice" class="col-lg-2 control-label">Date of Birth</label>
+                    <div class="col-lg-10">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" name="dateOfBirth" ng-model="User.userData.dateOfBirth" required/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                        <p ng-show="userForm.dateOfBirth.$invalid && !userForm.dateOfBirth.$pristine" class="help-block">Date Of Birth is required.</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">Cancel</button>
+                <button type="submit" class="btn btn-primary" ng-if="!User.userUpdate">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-if="User.userUpdate">Update</button>
+            </div>
+        </div>
+    </fieldset>
+</form>

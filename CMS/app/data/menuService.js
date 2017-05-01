@@ -22,6 +22,15 @@
                     name: 'Add New',
                     url: 'cms.bong_create'
                 }]
+            },{
+                name: 'Users',
+                subMenuItems: [{
+                    name: 'View All',
+                    url: 'cms.users'
+                }, {
+                    name: 'Add New',
+                    url: 'cms.user_create'
+                }]
             }];
 
             return items;
