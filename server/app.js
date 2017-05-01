@@ -11,6 +11,7 @@ const cors = require('cors');
 const passport = require('passport');
 const config = require('./configuration/database');
 const bong = require('./routes/bong');
+const user = require('./routes/user');
 //require multer for the file uploads
 const multer = require('multer');
 // set the directory for the uploads to the uploaded to
@@ -62,6 +63,7 @@ mongoose.connection.on('error',() => {
 });
 
 app.use('/bong',bong);
+app.use('/user',user);
 
 app.listen('9000',() => {
     console.log('server is connected');
