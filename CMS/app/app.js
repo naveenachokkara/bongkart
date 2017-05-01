@@ -52,6 +52,13 @@
                 templateUrl: 'bong/bongCreate.html'
             },
             {
+                name: 'cms.bong_view',
+                url: 'bong/:id',
+                controller: 'BongController',
+                controllerAs: 'Bong',
+                templateUrl: 'bong/bong.html'
+            },
+            {
                 name: 'cms.users',
                 url: 'users',
                 controller: 'UserController',
@@ -71,7 +78,15 @@
                 controller: 'UserController',
                 controllerAs: 'User',
                 templateUrl: 'users/userCreate.html'
+            },
+            {
+                name: 'cms.user_view',
+                url: 'user/:id',
+                controller: 'UserController',
+                controllerAs: 'User',
+                templateUrl: 'users/user.html'
             }
+
 
         ];
         return routes;

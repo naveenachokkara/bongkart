@@ -13,7 +13,7 @@ router.post('/create',(req,res,next) => {
         res.json({status:'failure'});
     }
     else{
-        res.json({status:'User is created'});
+        res.json(user);
 }
 });
 });

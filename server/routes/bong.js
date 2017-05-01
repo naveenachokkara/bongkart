@@ -14,7 +14,7 @@ router.post('/create',(req,res,next) => {
             res.json({status:'failure'});
         }
         else{
-            res.json({status:'Bong is created'});
+            res.json(bong);
          }
     });
 });

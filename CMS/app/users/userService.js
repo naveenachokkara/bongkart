@@ -19,8 +19,8 @@
         function create(userData) {
             var defer = q.defer();
             var url = SERVER_API+'user/create';
-            http.post(url,userData).then(function () {
-                defer.resolve();
+            http.post(url,userData).then(function (user) {
+                defer.resolve(user.data);
             },function(){
                 defer.reject();
             });

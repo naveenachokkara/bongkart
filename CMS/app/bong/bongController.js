@@ -6,9 +6,9 @@
     angular.module('bongKart.bong')
         .controller('BongController', BongController);
 
-    BongController.$inject = ['$scope', 'FileUploader','BongService','$state','$uibModal'];
+    BongController.$inject = ['$scope', 'FileUploader','BongService','$state','$uibModal','toaster'];
 
-    function BongController(scope, FileUploader,BongService,state,uibModal) {
+    function BongController(scope, FileUploader,BongService,state,uibModal,toaster) {
         var self = this;
         self.pageName = 'Bongs';
         self.saveBong = saveBong;
@@ -120,14 +120,14 @@
                 if(angular.isDefined(state.params.id)){
                     BongService.update(state.params.id,self.bongData).then(function(){
                         toaster.success({title: "Success", body:"Bong updated successfully."});
-                        // state.go('cms.bongs');
+                        state.go('cms.bong_view',{id:state.params.id});
                     },function(error){
                         console.info(error);
                     });
                 }
                 else{
-                    BongService.create(self.bongData).then(function(){
-                        // state.go('cms.bongs');
+                    BongService.create(self.bongData).then(function(bong){
+                        state.go('cms.bong_view',{id:bong._id});
                         toaster.success({title: "Update", body:"User updated successfully."});
                     },function(error){
                         console.info(error);

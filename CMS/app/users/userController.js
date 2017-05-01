@@ -160,15 +160,16 @@
                 if(angular.isDefined(state.params.id)){
                     UserService.update(state.params.id,self.userData).then(function(){
                         toaster.success({title: "Update", body:"User updated successfully."});
-                        // state.go('cms.users');
+                        state.go('cms.user_view',{id:state.params.id});
                     },function(error){
                         console.info(error);
                     });
                 }
                 else{
-                    UserService.create(self.userData).then(function(){
+                    UserService.create(self.userData).then(function(user){
+                        console.log(user);
                         toaster.success({title: "Success", body:"User Created successfully."});
-                        // state.go('cms.users');
+                        state.go('cms.user_view',{id:user._id});
                     },function(error){
                         console.info(error);
                     });

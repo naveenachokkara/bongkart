@@ -19,8 +19,8 @@
         function create(bongData) {
             var defer = q.defer();
             var url = SERVER_API+'bong/create';
-            http.post(url,bongData).then(function () {
-                defer.resolve();
+            http.post(url,bongData).then(function (bong) {
+                defer.resolve(bong.data);
             },function(){
                 defer.reject();
             });

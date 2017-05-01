@@ -1,0 +1,37 @@
+<style>
+    th{
+        width: 1%;
+    }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">User</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-hover ">
+            <tbody>
+            <tr>
+                <th style="width: 10px;">username</th>
+                <td>{{User.userData.userName}}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{User.userData.email}}</td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td>{{User.userData.phoneNumber}}</td>
+            </tr>
+            <tr>
+                <th>gender</th>
+                <td>{{User.userData.gender}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer">
+        <a ui-sref="cms.users" class="btn btn-success">View All</a>
+        <a ui-sref="cms.user_update({id:User.userData._id})" class="btn btn-primary">Edit</a>
+        <a ui-sref="cms.user_create" class="btn btn-default">Add New</a>
+    </div>
+</div>
