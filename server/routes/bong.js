@@ -31,4 +31,38 @@ router.get('/list',(req,res,next) => {
     });
 });
 
+router.get('/:id',(req,res,next) => {
+    bong.find({_id:req.params.id},(err,bong) => {
+    if(err){
+        res.json({status:'failure'});
+    }
+    else{
+        res.json(bong);
+}
+});
+});
+
+
+router.delete('/:id',(req,res,next) => {
+    bong.remove({_id:req.params.id},(err,bong) => {
+    if(err){
+        res.json({status:'failure'});
+    }
+    else{
+        res.json(bong);
+}
+});
+});
+
+router.put('/update/:id',(req,res,next) => {
+    bong.findOneAndUpdate({_id:req.params.id},req.body,(err,bong) => {
+        if(err){
+            res.json({status:'failure'});
+        }
+        else{
+            res.json({status:'Bong is updated successfully'});
+         }
+    });
+});
+
 module.exports = router;

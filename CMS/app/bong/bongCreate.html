@@ -109,7 +109,7 @@
                         <div class="form-group" ng-class="{ 'has-error' : bongForm.modelNumber.$invalid && !bongForm.modelNumber.$pristine }">
                             <label for="inputmodelnumber" class="col-lg-2 control-label">Model Number</label>
                             <div class="col-lg-10">
-                                <input type="text" class="form-control" id="inputmodelnumber" placeholder="Model Number" name="modelNumber" ng-model="Bong.bongData.modalNumber" required>
+                                <input type="text" class="form-control" id="inputmodelnumber" placeholder="Model Number" name="modelNumber" ng-model="Bong.bongData.modelNumber" required>
                                 <p ng-show="bongForm.modelNumber.$invalid && !bongForm.modelNumber.$pristine" class="help-block">Model number is required.</p>
                             </div>
                         </div>
@@ -180,6 +180,16 @@
                         <h3 class="panel-title">Image Upload</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="form-group" ng-if="Bong.bomUpdate">
+                            <label class="col-lg-2 control-label">Images</label>
+                            <div class="col-lg-2">
+                                <ul class="list-group">
+                                    <li ng-repeat="image in Bong.bongData.images" class="list-group-item">
+                                        <img ng-src="http://localhost:9000/uploads/{{image.file.name}}" class="img-thumbnail" alt="Cinque Terre" width="80" height="100">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Select Images</label>
                             <div class="col-lg-10">
@@ -269,7 +279,8 @@
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
                 <button type="reset" class="btn btn-default">Cancel</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-if="!Bong.bomUpdate">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-if="Bong.bomUpdate">Update</button>
             </div>
         </div>
     </fieldset>

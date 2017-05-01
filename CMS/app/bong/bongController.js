@@ -6,13 +6,53 @@
     angular.module('bongKart.bong')
         .controller('BongController', BongController);
 
-    BongController.$inject = ['$scope', 'FileUploader','BongService','$state'];
+    BongController.$inject = ['$scope', 'FileUploader','BongService','$state','$uibModal'];
 
-    function BongController(scope, FileUploader,BongService,state) {
+    function BongController(scope, FileUploader,BongService,state,uibModal) {
         var self = this;
         self.pageName = 'Bongs';
         self.saveBong = saveBong;
+        self.confirmDelete = confirmDelete;
         self.bongData = {};
+
+        self.header = 'Delete Confirmation';
+        self.body = 'Put here your body';
+
+        function confirmDelete(bong){
+            var modalInstance = uibModal.open({
+                templateUrl: 'bong/deletePopUp.html',
+                controller: ModalInstanceCtrl,
+                 scope: scope,
+                resolve: {
+                    bong: function () {
+                        return bong;
+                    }
+                }
+            });
+        };
+
+        var ModalInstanceCtrl = function ($scope, uibModalInstance, bong) {
+            $scope.bong = bong;
+            $scope.submit = function () {
+                $scope.$parent.deleteBong(bong._id);
+                uibModalInstance.close('closed');
+            };
+
+            $scope.cancel = function () {
+                uibModalInstance.dismiss('cancel');
+            };
+        };
+        ModalInstanceCtrl.$inject = ["$scope", "$uibModalInstance", 'bong'];
+
+
+        scope.deleteBong = function (bongId) {
+            BongService.deleteBong(bongId).then(function(){
+                console.log('deleted Successfully');
+            },function (error) {
+               console.info(error);
+            });
+        };
+
 
         var uploader = scope.uploader = new FileUploader({
             url: 'http://localhost:9000/upload'
@@ -26,6 +66,15 @@
                 return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
             }
         });
+
+        if(angular.isDefined(state.params.id)){
+            BongService.getBongData(state.params.id).then(function(bong){
+                self.bongData = bong[0];
+                self.bomUpdate = true;
+            },function(error){
+                console.info(error);
+            });
+        }
 
         // CALLBACKS
         uploader.onWhenAddingFileFailed = function (item /*{File|FileLikeObject}*/, filter, options) {
@@ -68,11 +117,20 @@
 
         function saveBong(isvalid) {
             if (isvalid) {
-                BongService.create(self.bongData).then(function(){
-                    state.go('cms.bongs');
-                },function(error){
-                   console.info(error);
-                });
+                if(angular.isDefined(state.params.id)){
+                    BongService.update(state.params.id,self.bongData).then(function(){
+                        state.go('cms.bongs');
+                    },function(error){
+                        console.info(error);
+                    });
+                }
+                else{
+                    BongService.create(self.bongData).then(function(){
+                        state.go('cms.bongs');
+                    },function(error){
+                        console.info(error);
+                    });
+                }
             }
             else {
                 if (scope.bongForm.brand.$invalid) {
@@ -124,5 +182,7 @@
                 console.info(error);
             });
         })();
+
+
     }
 })();

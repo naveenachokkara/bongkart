@@ -36,8 +36,8 @@
                         <td>{{bong.price}}</td>
                         <td>{{bong.quantity}}</td>
                         <td>
-                            <a href=""><i class="fa fa-pencil-square-o" aria-hidden="true" style="text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>&nbsp;&nbsp;&nbsp;
-                            <a href=""><i class="fa fa-trash" aria-hidden="true" style="color: red;text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>
+                            <a ui-sref="cms.bong_update({id:bong._id})"><i class="fa fa-pencil-square-o" aria-hidden="true" style="text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>&nbsp;&nbsp;&nbsp;
+                            <a  ng-click="Bong.confirmDelete(bong)" style="cursor: pointer" data-toggle="modal"><i class="fa fa-trash" aria-hidden="true" style="color: red;text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>
                         </td>
                     </tr>
                     </tbody>
