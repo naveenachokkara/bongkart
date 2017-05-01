@@ -1,5 +1,8 @@
 /* app css stylesheet */
-body { padding-top: 70px; }
+html, body { height: 100%; }
+body { 
+	padding-top: 70px; 
+}
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -33,6 +36,41 @@ body { padding-top: 70px; }
     	margin: 10px 0px;
     }
 
+    btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        background: white;
+        cursor: inherit;
+        display: block;
+    }
+
+    .my-drop-zone { border: dotted 3px lightgray; }
+    .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+    .another-file-over-class { border: dotted 3px green; }
+
+   
+
+    canvas {
+        background-color: #f3f3f3;
+        -webkit-box-shadow: 3px 3px 3px 0 #e3e3e3;
+        -moz-box-shadow: 3px 3px 3px 0 #e3e3e3;
+        box-shadow: 3px 3px 3px 0 #e3e3e3;
+        border: 1px solid #c3c3c3;
+        height: 100px;
+        margin: 6px 0 0 6px;
+    }
 /* expanding input CSS only */
 #myInput {
 	 position:relative;
@@ -52,4 +90,14 @@ body { padding-top: 70px; }
    color:#e5e5ef;
    font-size:17px;
 
+}
+.push{
+	padding-bottom: 35px;
+}
+
+@media (max-width: 482px) {
+    .btn, .btn-group {
+        width:100%;
+        margin: 2px;
+    }
 }
