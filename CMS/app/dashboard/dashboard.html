@@ -11,53 +11,17 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Column heading</th>
-                                <th>Column heading</th>
-                                <th>Column heading</th>
+                                <th>Model Number</th>
+                                <th>Brand</th>
+                                <th>Quantity</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="info">
-                                <td>3</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="success">
-                                <td>4</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="danger">
-                                <td>5</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="warning">
-                                <td>6</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="active">
-                                <td>7</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
+                            <tr ng-repeat="bong in main.bongs">
+                                <td>{{$index + 1}}</td>
+                                <td>{{bong.modelNumber}}</td>
+                                <td>{{bong.brand}}</td>
+                                <td>{{bong.quantity}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -74,53 +38,17 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Column heading</th>
-                                <th>Column heading</th>
-                                <th>Column heading</th>
+                                <th>User Name</th>
+                                <th>Mobile Number</th>
+                                <th>Role</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="info">
-                                <td>3</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="success">
-                                <td>4</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="danger">
-                                <td>5</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="warning">
-                                <td>6</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                            </tr>
-                            <tr class="active">
-                                <td>7</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
+                            <tr ng-repeat="user in main.users">
+                                <td>{{$index + 1}}</td>
+                                <td>{{user.userName}}</td>
+                                <td>{{user.phoneNumber}}</td>
+                                <td>{{user.role}}</td>
                             </tr>
                             </tbody>
                         </table>

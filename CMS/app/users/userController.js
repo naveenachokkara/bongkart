@@ -6,9 +6,9 @@
     angular.module('bongKart.users')
         .controller('UserController', UserController);
 
-    UserController.$inject = ['$scope','$state','$uibModal','UserService'];
+    UserController.$inject = ['$scope','$state','$uibModal','UserService','toaster'];
 
-    function UserController($scope,state,uibModal,UserService) {
+    function UserController($scope,state,uibModal,UserService,toaster) {
         var self = this;
         self.pageName = 'Users';
         self.saveUser = saveUser;
@@ -159,40 +159,42 @@
             if (isvalid) {
                 if(angular.isDefined(state.params.id)){
                     UserService.update(state.params.id,self.userData).then(function(){
-                        state.go('cms.users');
+                        toaster.success({title: "Update", body:"User updated successfully."});
+                        // state.go('cms.users');
                     },function(error){
                         console.info(error);
                     });
                 }
                 else{
                     UserService.create(self.userData).then(function(){
-                        state.go('cms.users');
+                        toaster.success({title: "Success", body:"User Created successfully."});
+                        // state.go('cms.users');
                     },function(error){
                         console.info(error);
                     });
                 }
             }
             else {
-                if (scope.userForm.username.$invalid) {
-                    scope.userForm.username.$pristine = false;
+                if ($scope.userForm.username.$invalid) {
+                    $scope.userForm.username.$pristine = false;
                 }
-                if (scope.userForm.phoneNumber.$invalid) {
-                    scope.userForm.phoneNumber.$pristine = false;
+                if ($scope.userForm.phoneNumber.$invalid) {
+                    $scope.userForm.phoneNumber.$pristine = false;
                 }
-                if (scope.userForm.email.$invalid) {
-                    scope.userForm.email.$pristine = false;
+                if ($scope.userForm.email.$invalid) {
+                    $scope.userForm.email.$pristine = false;
                 }
-                if (scope.userForm.gender.$invalid) {
-                    scope.userForm.gender.$pristine = false;
+                if ($scope.userForm.gender.$invalid) {
+                    $scope.userForm.gender.$pristine = false;
                 }
-                if (scope.userForm.role.$invalid) {
-                    scope.userForm.role.$pristine = false;
+                if ($scope.userForm.role.$invalid) {
+                    $scope.userForm.role.$pristine = false;
                 }
-                if (scope.userForm.facebookId.$invalid) {
-                    scope.userForm.facebookId.$pristine = false;
+                if ($scope.userForm.facebookId.$invalid) {
+                    $scope.userForm.facebookId.$pristine = false;
                 }
-                if (scope.userForm.dateOfBirth.$invalid) {
-                    scope.userForm.dateOfBirth.$pristine = false;
+                if ($scope.userForm.dateOfBirth.$invalid) {
+                    $scope.userForm.dateOfBirth.$pristine = false;
                 }
             }
         }

@@ -119,14 +119,16 @@
             if (isvalid) {
                 if(angular.isDefined(state.params.id)){
                     BongService.update(state.params.id,self.bongData).then(function(){
-                        state.go('cms.bongs');
+                        toaster.success({title: "Success", body:"Bong updated successfully."});
+                        // state.go('cms.bongs');
                     },function(error){
                         console.info(error);
                     });
                 }
                 else{
                     BongService.create(self.bongData).then(function(){
-                        state.go('cms.bongs');
+                        // state.go('cms.bongs');
+                        toaster.success({title: "Update", body:"User updated successfully."});
                     },function(error){
                         console.info(error);
                     });

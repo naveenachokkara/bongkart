@@ -6,6 +6,8 @@
     angular.module('bongKart', [
         'ui.router',
         'ui.bootstrap',
+        'ngAnimate',
+        'toaster',
         'angularFileUpload',
         'bongKart.bong',
         'bongKart.users'

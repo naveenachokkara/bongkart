@@ -103,7 +103,9 @@
                 <button type="reset" class="btn btn-default">Cancel</button>
                 <button type="submit" class="btn btn-primary" ng-if="!User.userUpdate">Submit</button>
                 <button type="submit" class="btn btn-primary" ng-if="User.userUpdate">Update</button>
+                <a ui-sref="cms.users" class="btn btn-success">UsersList</a>
             </div>
         </div>
     </fieldset>
 </form>
+<toaster-container></toaster-container>
