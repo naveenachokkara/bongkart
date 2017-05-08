@@ -30,7 +30,7 @@
                         <td style="width: 10%">
                             <ul class="list-group">
                                 <li ng-repeat="image in bong.images" class="list-group-item">
-                                    <img ng-src="http://localhost:9000/uploads/{{image.file.name}}" class="img-thumbnail" alt="Cinque Terre">
+                                    <img ng-src="http://ec2-52-15-85-26.us-east-2.compute.amazonaws.com:9000/uploads/{{image.file.name}}" class="img-thumbnail" alt="Cinque Terre">
                                 </li>
                             </ul>
                         </td>
@@ -38,7 +38,7 @@
                         <td>{{bong.quantity}}</td>
                         <td>
                             <a ui-sref="cms.bong_update({id:bong._id})"><i class="fa fa-pencil-square-o" aria-hidden="true" style="text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>&nbsp;&nbsp;&nbsp;
-                            <a  ng-click="Bong.confirmDelete(bong)" style="cursor: pointer" data-toggle="modal"><i class="fa fa-trash" aria-hidden="true" style="color: red;text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>
+                            <a  ng-click="Bong.confirmDelete(bong,$index)" style="cursor: pointer" data-toggle="modal"><i class="fa fa-trash" aria-hidden="true" style="color: red;text-shadow: 1px 1px 1px #ccc;font-size: 1.5em;"></i></a>
                         </td>
                     </tr>
                     </tbody>

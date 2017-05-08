@@ -16,6 +16,8 @@ const user = require('./routes/user');
 const multer = require('multer');
 // set the directory for the uploads to the uploaded to
 const DIR = './uploads/';
+const port = process.env.PORT || 3000;
+
 
 const app = express();
 
@@ -65,6 +67,6 @@ mongoose.connection.on('error',() => {
 app.use('/bong',bong);
 app.use('/user',user);
 
-app.listen('9000',() => {
-    console.log('server is connected');
+app.listen(port,() => {
+    console.log('server is connected at port '+port);
 });

@@ -18,7 +18,7 @@
         self.header = 'Delete Confirmation';
         self.body = 'Put here your body';
 
-        function confirmDelete(bong){
+        function confirmDelete(bong,index){
             var modalInstance = uibModal.open({
                 templateUrl: 'bong/deletePopUp.html',
                 controller: ModalInstanceCtrl,
@@ -26,15 +26,18 @@
                 resolve: {
                     bong: function () {
                         return bong;
+                    },
+                    index:function(){
+                        return index;
                     }
                 }
             });
         };
 
-        var ModalInstanceCtrl = function ($scope, uibModalInstance, bong) {
+        var ModalInstanceCtrl = function ($scope, uibModalInstance, bong,index) {
             $scope.bong = bong;
             $scope.submit = function () {
-                $scope.$parent.deleteBong(bong._id);
+                $scope.$parent.deleteBong(bong._id,index);
                 uibModalInstance.close('closed');
             };
 
@@ -45,9 +48,9 @@
         ModalInstanceCtrl.$inject = ["$scope", "$uibModalInstance", 'bong'];
 
 
-        scope.deleteBong = function (bongId) {
+        scope.deleteBong = function (bongId,index) {
             BongService.deleteBong(bongId).then(function(){
-                console.log('deleted Successfully');
+                self.bongs.splice(index,1);
             },function (error) {
                console.info(error);
             });
@@ -55,7 +58,7 @@
 
 
         var uploader = scope.uploader = new FileUploader({
-            url: 'http://localhost:9000/upload'
+            url: 'http://ec2-52-15-85-26.us-east-2.compute.amazonaws.com:9000/upload'
         });
 
         // FILTERS

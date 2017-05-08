@@ -110,7 +110,7 @@
             return '';
         }
 
-        function confirmDelete(user){
+        function confirmDelete(user,index){
             var modalInstance = uibModal.open({
                 templateUrl: 'users/deletePopUp.html',
                 controller: ModalInstanceCtrl,
@@ -118,15 +118,18 @@
                 resolve: {
                     user: function () {
                         return user;
+                    },
+                    index:function () {
+                        return index;
                     }
                 }
             });
         };
 
-        var ModalInstanceCtrl = function ($scope, uibModalInstance, user) {
+        var ModalInstanceCtrl = function ($scope, uibModalInstance, user,index) {
             $scope.user = user;
             $scope.submit = function () {
-                $scope.$parent.deleteUser(user._id);
+                $scope.$parent.deleteUser(user._id,index);
                 uibModalInstance.close('closed');
             };
 
@@ -137,9 +140,9 @@
         ModalInstanceCtrl.$inject = ["$scope", "$uibModalInstance", 'user'];
 
 
-        $scope.deleteUser = function (bongId) {
+        $scope.deleteUser = function (bongId,index) {
             UserService.deleteUser(bongId).then(function(){
-                console.log('deleted Successfully');
+                self.users.splice(index,1);
             },function (error) {
                console.info(error);
             });
