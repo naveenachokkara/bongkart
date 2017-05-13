@@ -146,7 +146,7 @@
                             <div class="col-lg-2">
                                 <ul class="list-group">
                                     <li ng-repeat="image in Bong.bongData.images" class="list-group-item">
-                                        <img ng-src="http://localhost:9000/uploads/{{image.file.name}}" class="img-thumbnail" alt="Cinque Terre" width="80" height="100">
+                                        <img ng-src="{{Bong.serverAPI}}uploads/{{image.file.name}}" class="img-thumbnail" alt="Cinque Terre" width="80" height="100">
                                     </li>
                                 </ul>
                             </div>

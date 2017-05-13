@@ -17,6 +17,8 @@
     "bower-bootswatch-paper": "paper-less#*"
   },
   "devDependencies": {
-    "angular-file-upload": "^2.5.0"
+    "angular-file-upload": "^2.5.0",
+    "AngularJS-Toaster": "angularjs-toaster#^2.1.0",
+    "angular-bootstrap": "^2.5.0"
   }
 }

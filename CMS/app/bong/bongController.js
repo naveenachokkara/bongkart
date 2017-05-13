@@ -6,9 +6,9 @@
     angular.module('bongKart.bong')
         .controller('BongController', BongController);
 
-    BongController.$inject = ['$scope', 'FileUploader','BongService','$state','$uibModal','toaster'];
+    BongController.$inject = ['$scope', 'FileUploader','BongService','$state','$uibModal','toaster','SERVER_API'];
 
-    function BongController(scope, FileUploader,BongService,state,uibModal,toaster) {
+    function BongController(scope, FileUploader,BongService,state,uibModal,toaster,SERVER_API) {
         var self = this;
         self.pageName = 'Bongs';
         self.saveBong = saveBong;
@@ -17,6 +17,7 @@
 
         self.header = 'Delete Confirmation';
         self.body = 'Put here your body';
+        self.serverAPI = SERVER_API;
 
         function confirmDelete(bong,index){
             var modalInstance = uibModal.open({
@@ -58,7 +59,7 @@
 
 
         var uploader = scope.uploader = new FileUploader({
-            url: 'http://ec2-52-15-85-26.us-east-2.compute.amazonaws.com:9000/upload'
+            url: SERVER_API+'upload'
         });
 
         // FILTERS

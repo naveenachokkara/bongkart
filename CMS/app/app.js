@@ -85,7 +85,14 @@
                 controller: 'UserController',
                 controllerAs: 'User',
                 templateUrl: 'users/user.html'
-            }
+            },
+            {
+                name: 'cms.bong_orders',
+                url: 'bong/orders',
+                controller: 'BongController',
+                controllerAs: 'Bong',
+                templateUrl: 'bong/orders.html'
+            },
 
 
         ];

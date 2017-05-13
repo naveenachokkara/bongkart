@@ -30,7 +30,7 @@
                         <td style="width: 10%">
                             <ul class="list-group">
                                 <li ng-repeat="image in bong.images" class="list-group-item">
-                                    <img ng-src="http://ec2-52-15-85-26.us-east-2.compute.amazonaws.com:9000/uploads/{{image.file.name}}" class="img-thumbnail" alt="Cinque Terre">
+                                    <img ng-src="{{Bong.serverAPI}}uploads/{{image.file.name}}" class="img-thumbnail" alt="Cinque Terre">
                                 </li>
                             </ul>
                         </td>
