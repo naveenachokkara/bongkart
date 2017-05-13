@@ -7,10 +7,11 @@ const router = express.Router();
 const user = require('../models/user');
 
 router.post('/create',(req,res,next) => {
+    console.log(req.body);
     let newUser = new user(req.body);
     newUser.save((err,user) => {
     if(err){
-        res.json({status:'failure'});
+        res.json(err);
     }
     else{
         res.json(user);

@@ -20,11 +20,19 @@ const UserSchema = mongoose.Schema({
        type:String
    },
    "dateOfBirth":{
-       type:Date
+       type:String
    },
    "role":{
        type:String
-   }
+   },
+    "address":[{
+        "typeOfAddress":String,
+        "addressLine1":String,
+        "addressLine2":String,
+        "city":String,
+        "country":String,
+        "postalCode":String
+    }]
 });
 
 const user = module.exports = mongoose.model("User",UserSchema);
