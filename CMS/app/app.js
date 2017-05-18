@@ -93,6 +93,13 @@
                 controllerAs: 'Bong',
                 templateUrl: 'bong/orders.html'
             },
+            {
+                name: 'cms.orders',
+                url: '/order',
+                controller: 'OrderCtrl',
+                controllerAs: 'Order',
+                templateUrl: 'orders/order.html'
+            },
 
 
         ];
