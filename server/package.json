@@ -19,5 +19,8 @@
     "passport-jwt": "*"
   },
   "author": "RangaKomarthi",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "extend": "^3.0.1"
+  }
 }

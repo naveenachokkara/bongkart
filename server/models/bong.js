@@ -45,6 +45,10 @@ const BongSchema = mongoose.Schema({
     },
     "quantity":{
         type:Number
+    },
+    "created": {
+        type: Date,
+        default: Date.now
     }
 });
 

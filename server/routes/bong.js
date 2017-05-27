@@ -6,6 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const bong = require('../models/bong');
+const extend = require('extend');
 
 router.post('/create',(req,res,next) => {
     let newBong = new bong(req.body);
@@ -21,7 +22,21 @@ router.post('/create',(req,res,next) => {
 
 
 router.get('/list',(req,res,next) => {
-    bong.find({},(err,bongs) => {
+    var conditionalQery = {};
+    if(typeof req.query.latest !== 'undefined'){
+        var query = {'created':-1};
+        extend(conditionalQery,query);
+    }
+    if(typeof req.query.priceHighToLow !== 'undefined'){
+        var query = {'price':-1};
+        extend(conditionalQery,query);
+    }
+    if(typeof req.query.priceLowToHigh !== 'undefined'){
+        var query = {'price':1};
+        extend(conditionalQery,query);
+    }
+    console.log(conditionalQery);
+    bong.find().sort(conditionalQery).exec((err, bongs) => {
         if(err){
             res.json({status:'failure'});
         }
@@ -29,6 +44,18 @@ router.get('/list',(req,res,next) => {
             res.json(bongs);
         }
     });
+});
+
+
+router.get('/brands',(req,res,next) => {
+    bong.find().sort('-created').select('brand').exec((err, bongs) => {
+    if(err){
+        res.json({status:'failure'});
+    }
+    else{
+        res.json(bongs);
+    }
+});
 });
 
 router.get('/:id',(req,res,next) => {
