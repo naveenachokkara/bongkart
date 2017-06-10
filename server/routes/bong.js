@@ -40,7 +40,7 @@ router.get('/list',(req,res,next) => {
     if(typeof req.query.startIndex !== 'undefined'){
         skip = req.query.startIndex;
     }
-    bong.find().sort(conditionalQery).skip(skip).limit(5).exec((err, bongs) => {
+    bong.find().sort(conditionalQery).skip(Number(skip)).limit(5).exec((err, bongs) => {
         if(err){
             res.json({status:'failure'});
         }
