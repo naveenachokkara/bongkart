@@ -5,5 +5,5 @@
     'use strict';
     angular
         .module('bongKart.bong')
-        .constant('SERVER_API', 'http://ec2-52-15-85-26.us-east-2.compute.amazonaws.com:9000/');
+        .constant('SERVER_API', 'http://50.63.165.179:3000/');
 })();

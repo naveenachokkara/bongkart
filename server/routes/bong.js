@@ -7,6 +7,7 @@ const express = require('express');
 const router = express.Router();
 const bong = require('../models/bong');
 const extend = require('extend');
+const _ = require('lodash');
 
 router.post('/create',(req,res,next) => {
     let newBong = new bong(req.body);
@@ -23,6 +24,7 @@ router.post('/create',(req,res,next) => {
 
 router.get('/list',(req,res,next) => {
     var conditionalQery = {};
+    var skip = 0;
     if(typeof req.query.latest !== 'undefined'){
         var query = {'created':-1};
         extend(conditionalQery,query);
@@ -35,12 +37,19 @@ router.get('/list',(req,res,next) => {
         var query = {'price':1};
         extend(conditionalQery,query);
     }
-    console.log(conditionalQery);
-    bong.find().sort(conditionalQery).exec((err, bongs) => {
+    if(typeof req.query.startIndex !== 'undefined'){
+        skip = req.query.startIndex;
+    }
+    bong.find().sort(conditionalQery).skip(skip).limit(5).exec((err, bongs) => {
         if(err){
             res.json({status:'failure'});
         }
         else{
+            _.forEach(bongs,function(bong){
+                _.forEach(bong.images,function(image){
+                    image.imageUrl = image.url+"s/"+ image.file.name;
+                })
+             });
             res.json(bongs);
         }
     });
