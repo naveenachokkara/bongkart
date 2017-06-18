@@ -120,7 +120,18 @@ router.get('/discount/percentages',(req,res,next) => {
         var minPercentage = _.min(discounts, function (percentage) {
             return percentage;
         });
-        res.json({data:{discounts:{max:maxPercentage,min:minPercentage},bongs:bongs}});
+
+
+        bong.find().distinct('brand',(err, brands) => {
+            if(err){
+                res.json({status:'failure'});
+            }
+            else{
+                res.json({data:{discounts:{max:maxPercentage,min:minPercentage},bongs:bongs,brands:brands}});
+        }
+        });
+
+
         // res.json(discounts);
     }
 });
