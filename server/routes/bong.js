@@ -57,7 +57,7 @@ router.get('/list',(req,res,next) => {
 
 
 router.get('/brands',(req,res,next) => {
-    bong.find().sort('-created').select('brand').exec((err, bongs) => {
+    bong.find().distinct('brand',(err, bongs) => {
     if(err){
         res.json({status:'failure'});
     }
@@ -99,6 +99,31 @@ router.put('/update/:id',(req,res,next) => {
             res.json({status:'Bong is updated successfully'});
          }
     });
+});
+
+router.get('/discount/percentages',(req,res,next) => {
+    var discounts = [];
+    bong.find().exec((err, bongs) => {
+    if(err){
+        res.json({status:'failure'});
+    }
+    else{
+        _.forEach(bongs,function(bong){
+           var discount = Number(bong.price) / Number(bong.originalPrice) * 100;
+           discounts.push(Math.round(discount));
+        });
+
+        var maxPercentage = _.max(discounts, function (percentage) {
+            return percentage;
+        });
+
+        var minPercentage = _.min(discounts, function (percentage) {
+            return percentage;
+        });
+        res.json({data:{discounts:{max:maxPercentage,min:minPercentage},bongs:bongs}});
+        // res.json(discounts);
+    }
+});
 });
 
 module.exports = router;

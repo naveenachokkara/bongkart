@@ -1,0 +1,24 @@
+
+<div class="panel panel-default">
+    <div class="panel-heading">Bongs Import</div>
+    <div class="panel-body">
+        <form class="form-horizontal" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Bongs</label>
+                <div class="col-lg-10">
+                    <!--<label class="btn btn-default btn-file">-->
+                        <!--Browse <input type="file"  multiple hidden file-model = "myFile">-->
+                    <!--</label>-->
+                    <input type="file"  multiple hidden file-model = "myFile">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-12">
+                    <button ng-click = "uploadFile()" class="btn btn-primary btn-block">Import</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

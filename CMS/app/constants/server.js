@@ -5,5 +5,5 @@
     'use strict';
     angular
         .module('bongKart.bong')
-        .constant('SERVER_API', 'http://50.63.165.179:3000/');
+        .constant('SERVER_API', 'http://localhost:3000/');
 })();

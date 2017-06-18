@@ -15,6 +15,7 @@
         self.getBongData = getBongData;
         self.deleteBong = deleteBong;
         self.list = list;
+        self.uploadFileToUrl = uploadFileToUrl;
 
         function create(bongData) {
             var defer = q.defer();
@@ -69,5 +70,22 @@
             });
             return defer.promise;
         }
+
+        function uploadFileToUrl(file, uploadUrl){
+            var defer = q.defer();
+            var fd = new FormData();
+            fd.append('file', file);
+            http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).then(function(){
+                defer.resolve();
+            },function () {
+                defer.reject();
+            });
+            return defer.promise;
+        }
+
+
     }
 })();

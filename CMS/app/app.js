@@ -59,6 +59,13 @@
                 templateUrl: 'bong/bong.html'
             },
             {
+                name: 'cms.bong_import',
+                url: 'bongs/import',
+                controller: 'BongController',
+                controllerAs: 'Bong',
+                templateUrl: 'bong/importBongs.html'
+            },
+            {
                 name: 'cms.users',
                 url: 'users',
                 controller: 'UserController',

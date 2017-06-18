@@ -190,5 +190,14 @@
         })();
 
 
+        scope.uploadFile = function(){
+            var file = scope.myFile;
+            console.log('file is ' );
+            console.dir(file);
+
+            var uploadUrl = SERVER_API+'upload';
+            BongService.uploadFileToUrl(file, uploadUrl);
+        }
+
     }
 })();
