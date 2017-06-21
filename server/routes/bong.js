@@ -127,7 +127,7 @@ router.get('/discount/percentages',(req,res,next) => {
                 res.json({status:'failure'});
             }
             else{
-                res.json({data:{discounts:{max:maxPercentage,min:minPercentage},bongs:bongs,brands:brands}});
+                res.json({data:{discounts:{max:maxPercentage,min:minPercentage},brands:brands}});
         }
         });
 
