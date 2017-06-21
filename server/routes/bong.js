@@ -101,7 +101,7 @@ router.put('/update/:id',(req,res,next) => {
     });
 });
 
-router.get('/discount/percentages',(req,res,next) => {
+router.get('/refine/data',(req,res,next) => {
     var discounts = [];
     bong.find().exec((err, bongs) => {
     if(err){
