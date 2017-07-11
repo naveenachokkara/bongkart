@@ -13,6 +13,7 @@ const config = require('./configuration/database');
 const bong = require('./routes/bong');
 const user = require('./routes/user');
 const order = require('./routes/order');
+const cart = require('./routes/cart');
 //require multer for the file uploads
 const multer = require('multer');
 // set the directory for the uploads to the uploaded to
@@ -68,6 +69,7 @@ mongoose.connection.on('error',() => {
 app.use('/bong',bong);
 app.use('/user',user);
 app.use('/order',order);
+app.use('/cart',cart);
 
 app.listen(port,() => {
     console.log('server is connected at port '+port);
