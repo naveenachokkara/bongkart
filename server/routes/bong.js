@@ -101,40 +101,23 @@ router.put('/update/:id',(req,res,next) => {
     });
 });
 
-router.get('/refine/data',(req,res,next) => {
+router.get('/refine/data', (req, res, next) => {
     var discounts = [];
-    bong.find().exec((err, bongs) => {
-    if(err){
-        res.json({status:'failure'});
-    }
-    else{
-        _.forEach(bongs,function(bong){
-           var discount = Number(bong.price) / Number(bong.originalPrice) * 100;
-           discounts.push(Math.round(discount));
-        });
-
-        var maxPercentage = _.max(discounts, function (percentage) {
-            return percentage;
-        });
-
-        var minPercentage = _.min(discounts, function (percentage) {
-            return percentage;
-        });
-
-
-        bong.find().distinct('brand',(err, brands) => {
-            if(err){
-                res.json({status:'failure'});
-            }
-            else{
-                res.json({data:{discounts:{max:maxPercentage,min:minPercentage},brands:brands}});
+    bong.aggregate([{ $project: { _id: 1, price: 1, originalPrice: 1, discount: { $multiply: [{ $floor: { $divide: [{ $multiply: [{ $divide: ["$price", "$originalPrice"] }, 100] }, 10] } }, 10] } } }, { $group: { _id: "$discount", total: { $sum: 1 } } }]).exec((err, discounts) => {
+        if (err) {
+            res.json({ status: 'failure' });
         }
-        });
-
-
-        // res.json(discounts);
-    }
-});
+        else {
+            bong.aggregate([{ $group: { _id: "$brand", total: { $sum: 1 } } }]).exec((err, brands) => {
+                if (err) {
+                    res.json({ status: 'failure' });
+                }
+                else {
+                    res.json({ discounts: discounts, brands: brands });
+                }
+            });
+        }
+    });
 });
 
 module.exports = router;
