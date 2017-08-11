@@ -187,7 +187,7 @@ router.get('/refine/data', (req, res, next) => {
                             discount.total += discounts[i].total;
                         }
                     })
-                    res.json({ discounts: discounts, brands: brands });
+                    res.json({ Discounts: discounts, Brands: brands });
                 }
             });
         }
