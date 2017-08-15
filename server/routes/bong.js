@@ -22,7 +22,7 @@ router.post('/create', (req, res, next) => {
 });
 
 
-router.get('/list', (req, res, next) => {
+router.post('/list', (req, res, next) => {
     var conditionalQery = {};
     var skip = 0;
     var query = [];
@@ -31,9 +31,9 @@ router.get('/list', (req, res, next) => {
         }
     };
     var sortQuery = { $sort: {} };
-    if (req.query.query) {
+    if (Object.keys(req.body).length) {
         try {
-            var reqQuery = JSON.parse(req.query.query);
+            var reqQuery =  req.body;
             if ((reqQuery.matchBy && typeof reqQuery.matchBy.discount === "number") || (reqQuery.sortBy && (reqQuery.sortBy.discount === 1 || reqQuery.sortBy.discount === -1))) {
                 query.push({
                     "$addFields": {
@@ -88,7 +88,8 @@ router.get('/list', (req, res, next) => {
 
             if (reqQuery.limit) {
                 query.push({ $limit: parseInt(reqQuery.limit) });
-            } 
+            }
+
             bong.aggregate(query).exec((err, bongs) => {
                 if (err) {
                     res.json({ status: 'failure' });
