@@ -31,7 +31,7 @@
         function list() {
             var defer = q.defer();
             var url = SERVER_API+'bong/list';
-            http.get(url).then(function (bongs) {
+            http.post(url).then(function (bongs) {
                 defer.resolve(bongs.data);
             },function(){
                 defer.reject();
