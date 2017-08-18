@@ -45,8 +45,13 @@ router.post('/updateItem', (req, res) => {
     Cart.update({
         "deviceId": req.body.deviceId,
         "items": { "$elemMatch": { "bongId": new ObjectId(reqData.item.bongId) } }
-    }, 
-     { $set: { "items.$.quantity": reqData.item.quantity } }, 
+    },
+        {
+            $set: { "items.$.quantity": reqData.item.quantity },
+            $currentDate: {
+                "updated": true
+            }
+        },
         function (err, cart) {
             if (err) {
                 console.log(err);
@@ -56,11 +61,35 @@ router.post('/updateItem', (req, res) => {
             }
         });
 });
+
+router.delete('/removeItem', (req, res) => {
+    var reqData = {};
+    reqData.deviceId = req.query.deviceId;
+    reqData.itemId = req.query.itemId;
+    console.log(reqData);
+    Cart.update({
+        "deviceId":reqData.deviceId
+    },
+        {
+            "$pull": { "items":{"bongId": new ObjectId(reqData.itemId) } },
+            "$currentDate": {
+                "updated": true
+            }
+        },
+        function (err, cart) {
+            if (err) {
+                console.log(err);
+                res.json({ "status": "error" });
+            } else {
+                res.json(cart);
+            }
+        });
+});
+
 router.get('/details', (req, res) => {
-    console.log(req.query.deviceId);
     Cart.findOne({
         "deviceId": req.query.deviceId
-    },  
+    },
         function (err, cart) {
             if (err) {
                 console.log(err);
