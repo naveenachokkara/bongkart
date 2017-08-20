@@ -25,26 +25,40 @@ router.post('/addItem', (req, res) => {
         } else if (reqData.deviceId) {
             matchQuery["deviceId"] = reqData.deviceId;
         }
-        Cart.findOneAndUpdate(
-            matchQuery,
-            {
-                "$push": { "items": reqData.item },
-                'updated': new Date().toISOString(),
-                "userId": reqData.userId ? reqData.userId : null,
-                "deviceId": reqData.userId ? null : reqData.deviceId
-            }, {
-                upsert: true,
-                setDefaultsOnInsert: true,
-                new: true,
-                runValidators: true
-            }, function (err, cart) {
-                if (err) {
-                    console.log(err);
-                    res.json({ "status": "error" });
+        Cart.findOne(matchQuery, function (err, cart) {
+            if (err) {
+                res.json({ "status": "error" });
+            } else {
+                if (cart && _.find(cart.items, function (item) {
+                    return item.bongId.equals(reqData.item.bongId)
+                })) {
+                    res.json({ "status": "error", "message": "Item already in cart" });
                 } else {
-                    res.json(cart);
+                    Cart.findOneAndUpdate(
+                        matchQuery,
+                        {
+                            "$push": { "items": reqData.item },
+                            "$currentDate": {
+                                "updated": true
+                            },
+                            "userId": reqData.userId ? reqData.userId : null,
+                            "deviceId": reqData.userId ? null : reqData.deviceId
+                        }, {
+                            upsert: true,
+                            setDefaultsOnInsert: true,
+                            new: true,
+                            runValidators: true
+                        }, function (err, cart) {
+                            if (err) {
+                                console.log(err);
+                                res.json({ "status": "error" });
+                            } else {
+                                res.json(cart);
+                            }
+                        });
                 }
-            });
+            }
+        });
     } else {
         res.json({ "status": "error", "message": "invalid inputs" });
     }
@@ -217,7 +231,7 @@ router.post('/mergeCarts', function (req, res) {
                             });
                     } else if (results.deviceCart && results.deviceCart.items) {
                         Cart.findOneAndUpdate(
-                            {"userId":req.body.userId},
+                            { "userId": req.body.userId },
                             {
                                 "items": results.deviceCart.items,
                                 'updated': new Date().toISOString(),
