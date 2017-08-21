@@ -162,6 +162,13 @@ router.get('/details', (req, res) => {
                     console.log(err);
                     res.json({ "status": "error" });
                 } else {
+                    if(cart && cart[0]){
+                        _.each(cart[0].products, function (bong) {
+                            _.each(bong.images, function (image) {
+                                image.imageUrl = image.url + "s/" + image.file.name;
+                            })
+                        });
+                    }                     
                     res.json(cart);
                 }
             });
