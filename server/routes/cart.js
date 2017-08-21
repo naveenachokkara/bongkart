@@ -95,6 +95,14 @@ router.post('/updateItem', (req, res) => {
                         if (err) {
                             res.json({ "status": "error" });
                         } else {
+                            if (cart[0]) {
+                                cart[0].items = _.filter(cart[0].items, function (item) {
+                                    return item.bongId.equals(new ObjectId(req.body.item.bongId))
+                                })
+                                cart[0].products = _.filter(cart[0].products, function (item) {
+                                    return item._id.equals(new ObjectId(req.body.item.bongId));
+                                })
+                            }
                             res.json(cart);
                         }
                     });
@@ -132,13 +140,7 @@ router.delete('/removeItem', (req, res) => {
                     console.log(err);
                     res.json({ "status": "error" });
                 } else {
-                    getCartDetails(req.query, function (err, cart) {
-                        if (err) {
-                            res.json({ "status": "error" });
-                        } else {
-                            res.json(cart);
-                        }
-                    });
+                    res.json({ "status": "success", "itemId": reqData.itemId });
                 }
             });
     } else {
