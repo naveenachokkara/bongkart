@@ -86,12 +86,18 @@ router.post('/updateItem', (req, res) => {
                     "updated": true
                 }
             },
-            function (err, cart) {
+            function (err, updateInfo) {
                 if (err) {
                     console.log(err);
                     res.json({ "status": "error" });
                 } else {
-                    res.json(cart);
+                    getCartDetails(reqData, function (err, cart) {
+                        if (err) {
+                            res.json({ "status": "error" });
+                        } else {
+                            res.json(cart);
+                        }
+                    });
                 }
             });
     } else {
@@ -121,12 +127,18 @@ router.delete('/removeItem', (req, res) => {
                     "updated": true
                 }
             },
-            function (err, cart) {
+            function (err, removeInfo) {
                 if (err) {
                     console.log(err);
                     res.json({ "status": "error" });
                 } else {
-                    res.json(cart);
+                    getCartDetails(req.query, function (err, cart) {
+                        if (err) {
+                            res.json({ "status": "error" });
+                        } else {
+                            res.json(cart);
+                        }
+                    });
                 }
             });
     } else {
@@ -137,41 +149,13 @@ router.delete('/removeItem', (req, res) => {
 
 router.get('/details', (req, res) => {
     if (req.query.deviceId || req.query.userId) {
-        var matchQuery = { "$match": {} };
-        if (req.query.userId) {
-            matchQuery["$match"]["userId"] = new ObjectId(req.query.userId);
-        } else if (req.query.deviceId) {
-            matchQuery["$match"]["deviceId"] = req.query.deviceId;
-        }
-        Cart.aggregate([
-            matchQuery,
-            {
-                "$unwind": { "path": "$items", "preserveNullAndEmptyArrays": true }
-            }, {
-                "$lookup": { "from": "bongs", "localField": "items.bongId", "foreignField": "_id", as: "products" }
-            }, {
-                "$unwind": "$products"
-            }, {
-                "$group": {
-                    "_id": "$_id",
-                    "items": { "$push": "$items" },
-                    "products": { "$push": "$products" }
-                }
-            }], function (err, cart) {
-                if (err) {
-                    console.log(err);
-                    res.json({ "status": "error" });
-                } else {
-                    if(cart && cart[0]){
-                        _.each(cart[0].products, function (bong) {
-                            _.each(bong.images, function (image) {
-                                image.imageUrl = image.url + "s/" + image.file.name;
-                            })
-                        });
-                    }                     
-                    res.json(cart);
-                }
-            });
+        getCartDetails(req.query, function (err, cart) {
+            if (err) {
+                res.json({ "status": "error" });
+            } else {
+                res.json(cart);
+            }
+        });
     } else {
         res.json({ "status": "error", "message": "invalid inputs" });
     }
@@ -277,4 +261,40 @@ router.post('/mergeCarts', function (req, res) {
         res.json({ "status": "error", "message": "invalid inputs" });
     }
 });
+function getCartDetails(reqData, callback) {
+    var matchQuery = { "$match": {} };
+    if (reqData.userId) {
+        matchQuery["$match"]["userId"] = new ObjectId(reqData.userId);
+    } else if (reqData.deviceId) {
+        matchQuery["$match"]["deviceId"] = reqData.deviceId;
+    }
+    Cart.aggregate([
+        matchQuery,
+        {
+            "$unwind": { "path": "$items", "preserveNullAndEmptyArrays": true }
+        }, {
+            "$lookup": { "from": "bongs", "localField": "items.bongId", "foreignField": "_id", as: "products" }
+        }, {
+            "$unwind": "$products"
+        }, {
+            "$group": {
+                "_id": "$_id",
+                "items": { "$push": "$items" },
+                "products": { "$push": "$products" }
+            }
+        }], function (err, cart) {
+            if (err) {
+                callback(err);
+            } else {
+                if (cart && cart[0]) {
+                    _.each(cart[0].products, function (bong) {
+                        _.each(bong.images, function (image) {
+                            image.imageUrl = image.url + "s/" + image.file.name;
+                        })
+                    });
+                }
+                callback(null, cart);
+            }
+        });
+}
 module.exports = router;
