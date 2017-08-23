@@ -14,6 +14,7 @@ const bong = require('./routes/bong');
 const user = require('./routes/user');
 const order = require('./routes/order');
 const cart = require('./routes/cart');
+const address = require('./routes/address');
 //require multer for the file uploads
 const multer = require('multer');
 // set the directory for the uploads to the uploaded to
@@ -70,7 +71,7 @@ app.use('/bong',bong);
 app.use('/user',user);
 app.use('/order',order);
 app.use('/cart',cart);
-
+app.use('/address',address);
 app.listen(port,() => {
     console.log('server is connected at port '+port);
 });
