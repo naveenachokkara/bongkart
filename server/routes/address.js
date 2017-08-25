@@ -59,7 +59,7 @@ router.delete('/:id', function (req, res) {
         if (err) {
             res.json({ "status": "error",message:"Failed to delete" });
         } else {
-            res.json({ "status": "success", "addressId": req.params.id});
+            res.json({ "status": "success", "addressId": req.params.id,message:"Address deleted successfully"});
         }
     });
 });

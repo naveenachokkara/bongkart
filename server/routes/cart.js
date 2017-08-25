@@ -64,7 +64,7 @@ router.post('/addItem', (req, res) => {
     }
 });
 
-router.post('/updateItem', (req, res) => {
+router.put('/updateItem', (req, res) => {
     var reqData = {};
     reqData.deviceId = req.body.deviceId;
     reqData.userId = req.body.userId;
