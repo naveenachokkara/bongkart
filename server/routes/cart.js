@@ -30,7 +30,7 @@ router.post('/addItem', (req, res) => {
                 res.json({ "status": "error" });
             } else {
                 if (cart && _.find(cart.items, function (item) {
-                    return item.bongId.equals(reqData.item.bongId)
+                    return item.bongId && item.bongId.equals(reqData.item.bongId)
                 })) {
                     res.json({ "status": "error", "message": "Item already in cart" });
                 } else {
@@ -97,7 +97,7 @@ router.put('/updateItem', (req, res) => {
                         } else {
                             if (cart[0]) {
                                 cart[0].items = _.filter(cart[0].items, function (item) {
-                                    return item.bongId.equals(new ObjectId(req.body.item.bongId))
+                                    return item.bongId && item.bongId.equals(new ObjectId(req.body.item.bongId))
                                 })
                                 cart[0].products = _.filter(cart[0].products, function (item) {
                                     return item._id.equals(new ObjectId(req.body.item.bongId));
