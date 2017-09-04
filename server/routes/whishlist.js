@@ -21,28 +21,28 @@ router.post('/addItem', (req, res) => {
                     res.json({ "status": "error", "message": "Item already in whishlist" });
                 } else {
                     WhishList.findOneAndUpdate(
-                    { userId: reqData.userId },
-                    {
-                        "$push": { "items": { "bongId": reqData.itemId } },
-                        "$currentDate": {
-                            "updated": true
-                        },
-                        "userId": reqData.userId
-                    }, {
-                        upsert: true,
-                        setDefaultsOnInsert: true,
-                        new: true,
-                        runValidators: true
-                    }, function (err, whishList) {
-                        if (err) {
-                            console.log(err);
-                            res.json({ "status": "error","error":err });
-                        } else {
-                            res.json(whishList);
-                        }
-                    });
+                        { userId: reqData.userId },
+                        {
+                            "$push": { "items": { "bongId": reqData.itemId } },
+                            "$currentDate": {
+                                "updated": true
+                            },
+                            "userId": reqData.userId
+                        }, {
+                            upsert: true,
+                            setDefaultsOnInsert: true,
+                            new: true,
+                            runValidators: true
+                        }, function (err, whishList) {
+                            if (err) {
+                                console.log(err);
+                                res.json({ "status": "error", "error": err });
+                            } else {
+                                res.json(whishList);
+                            }
+                        });
                 }
-                
+
             }
         });
     } else {
@@ -84,7 +84,7 @@ router.get('/details', (req, res) => {
     if (req.query.userId) {
         getWhishList(req.query, function (err, whishList) {
             if (err) {
-                res.json({ "status": "error" });
+                res.json({ "status": "error", error: err });
             } else {
                 res.json(whishList);
             }
@@ -96,8 +96,8 @@ router.get('/details', (req, res) => {
 
 function getWhishList(reqData, callback) {
     var matchQuery = { "$match": {} };
-    matchQuery["$match"]["userId"] = new ObjectId(reqData.userId); 
-    WhishList.aggregate([
+    matchQuery["$match"]["userId"] = new ObjectId(reqData.userId);
+    var query = [
         matchQuery,
         {
             "$unwind": { "path": "$items", "preserveNullAndEmptyArrays": true }
@@ -105,25 +105,33 @@ function getWhishList(reqData, callback) {
             "$lookup": { "from": "bongs", "localField": "items.bongId", "foreignField": "_id", as: "products" }
         }, {
             "$unwind": "$products"
-        }, {
-            "$group": {
-                "_id": "$_id",
-                "items": { "$push": "$items" },
-                "products": { "$push": "$products" }
+        }];
+    if (reqData.skip) {
+        query.push({ "$skip": parseInt(reqData.skip) });
+    }
+    if (reqData.limit) {
+        query.push({ "$limit": parseInt(reqData.limit) });
+    }
+    query.push({
+        "$group": {
+            "_id": "$_id",
+            "items": { "$push": "$items" },
+            "products": { "$push": "$products" }
+        }
+    });
+    WhishList.aggregate(query, function (err, whishlist) {
+        if (err) {
+            callback(err);
+        } else {
+            if (whishlist && whishlist[0]) {
+                _.each(whishlist[0].products, function (bong) {
+                    _.each(bong.images, function (image) {
+                        image.imageUrl = image.url + "s/" + image.file.name;
+                    })
+                });
             }
-        }], function (err, whishlist) {
-            if (err) {
-                callback(err);
-            } else {
-                if (whishlist && whishlist[0]) {
-                    _.each(whishlist[0].products, function (bong) {
-                        _.each(bong.images, function (image) {
-                            image.imageUrl = image.url + "s/" + image.file.name;
-                        })
-                    });
-                }
-                callback(null, whishlist);
-            }
-        });
+            callback(null, whishlist);
+        }
+    });
 }
 module.exports = router;
