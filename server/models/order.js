@@ -11,7 +11,7 @@ var OrderSchema = mongoose.Schema({
         default: Date.now
     },    
     "userId":{type: Schema.Types.ObjectId, ref: 'User' },
-    "addressId":{type: Schema.Types.ObjectId, ref: 'address' },
+    "address":Schema.Types.Mixed,
     "paymentMethod":String,
     "status": String,
     "expectedDeliveryDate": { type: Date }, 

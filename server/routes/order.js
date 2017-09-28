@@ -10,7 +10,7 @@ const Cart = require('../models/cart');
 const _ = require('underscore');
 var ObjectId = mongoose.Types.ObjectId;
 router.post('/placeOrder',(req,res,next) => {
-    if(req.body.userId && req.body.addressId && req.body.expectedDeliveryDate){
+    if(req.body.userId && req.body.address && req.body.expectedDeliveryDate){
         getCartDetails(req.body,function(err,carts){
             if(err){
                 res.json({ "status": "error", "error": err });
@@ -20,7 +20,7 @@ router.post('/placeOrder',(req,res,next) => {
                 var products = [];
                 var orderObj = {
                     "userId": req.body.userId,
-                    "addressId": req.body.addressId,
+                    "address": req.body.address,
                     "paymentMethod": null,
                     "status": "pending",
                     "expectedDeliveryDate": new Date(req.body.expectedDeliveryDate),
@@ -32,7 +32,7 @@ router.post('/placeOrder',(req,res,next) => {
                         return product._id.equals(item.bongId);
                     });
                     if (product) {
-                        totalAmount += product.price;
+                        totalAmount += (product.price * item.quantity);
                         items.push({
                             "bongId": item.bongId,
                             "quantity": item.quantity,
