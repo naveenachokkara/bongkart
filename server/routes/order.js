@@ -5,71 +5,110 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const router = express.Router();
-const order = require('../models/order');
+const Order = require('../models/order');
 const Cart = require('../models/cart');
 const _ = require('underscore');
 var ObjectId = mongoose.Types.ObjectId;
 router.post('/placeOrder',(req,res,next) => {
     if(req.body.userId && req.body.address && req.body.expectedDeliveryDate){
-        getCartDetails(req.body,function(err,carts){
-            if(err){
-                res.json({ "status": "error", "error": err });
-            } else if(carts && carts.length){
-                var items = [];
-                var totalAmount = 0;
-                var products = [];
-                var orderObj = {
-                    "userId": req.body.userId,
-                    "address": req.body.address,
-                    "paymentMethod": null,
-                    "status": "pending",
-                    "expectedDeliveryDate": new Date(req.body.expectedDeliveryDate),
-                    "deliveryDate": null,
-                    "tax": 0
-                }
-                _.each(carts[0].items, function (item) {
-                    var product = _.find(carts[0].products, function (product) {
-                        return product._id.equals(item.bongId);
-                    });
-                    if (product) {
-                        totalAmount += (product.price * item.quantity);
-                        items.push({
-                            "bongId": item.bongId,
-                            "quantity": item.quantity,
-                            "price": product.price,
-                            "originalPrice": product.originalPrice
-                        });
-                        products.push(product);
-                  }
+        if(req.body.items){
+            var items = [];
+            var totalAmount = 0;
+            var products = [];
+            var orderObj = {
+                "userId": req.body.userId,
+                "address": req.body.address,
+                "paymentMethod": null,
+                "status": "pending",
+                "expectedDeliveryDate": new Date(req.body.expectedDeliveryDate),
+                "deliveryDate": null,
+                "tax": 0
+            }
+            _.each(req.body.items,function(item){
+                totalAmount += (item.price * item.quantity);
+                items.push({
+                    "bongId": item.bongId,
+                    "quantity": item.quantity,
+                    "price": item.price,
+                    "originalPrice": item.originalPrice
                 });
+            })
+            if (items.length) {
                 orderObj.totalAmount = totalAmount;
                 orderObj.items = items;
-                let newOrder = new order(orderObj);
+                let newOrder = new Order(orderObj);
                 newOrder.save((err, order) => {
                     if (err) {
                         res.json({ "status": "error", message: "Order creation error", error: err });
                     } else {
-                        order = JSON.parse(JSON.stringify(order))
-                        order.products = products;
-                        Cart.findOneAndRemove(
-                            {
-                                "_id": carts[0]._id
-                            },
-                            function (err, cart) {
-                                console.log(cart);
-                                if (err) {
-                                    console.log("User Cart with id - " + carts[0]._id + " deleted failed - userId - "+ req.body.userId);
-                                } else {
-                                    console.log("User Cart with id - " + carts[0]._id + " deleted Succcessfully - userId"+ req.body.userId);
-                                }
-                            });
                         res.json(order);
                     }
                 });
-            } else {
-                res.json({ "status": "error", "message": "Cart not found" });
+            } else{
+                res.json({ "status": "error", "message": "invalid inputs" });   
             }
-        });
+        } else {
+            getCartDetails(req.body, function (err, carts) {
+                if (err) {
+                    res.json({ "status": "error", "error": err });
+                } else if (carts && carts.length) {
+                    var items = [];
+                    var totalAmount = 0;
+                    var products = [];
+                    var orderObj = {
+                        "userId": req.body.userId,
+                        "address": req.body.address,
+                        "paymentMethod": null,
+                        "status": "pending",
+                        "expectedDeliveryDate": new Date(req.body.expectedDeliveryDate),
+                        "deliveryDate": null,
+                        "tax": 0
+                    }
+                    _.each(carts[0].items, function (item) {
+                        var product = _.find(carts[0].products, function (product) {
+                            return product._id.equals(item.bongId);
+                        });
+                        if (product) {
+                            totalAmount += (product.price * item.quantity);
+                            items.push({
+                                "bongId": item.bongId,
+                                "quantity": item.quantity,
+                                "price": product.price,
+                                "originalPrice": product.originalPrice
+                            });
+                            products.push(product);
+                        }
+                    });
+                    orderObj.totalAmount = totalAmount;
+                    orderObj.items = items;
+                    let newOrder = new Order(orderObj);
+                    newOrder.save((err, order) => {
+                        if (err) {
+                            res.json({ "status": "error", message: "Order creation error", error: err });
+                        } else {
+                            // order = JSON.parse(JSON.stringify(order))
+                            // order.products = products;
+                            Cart.findOneAndRemove(
+                                {
+                                    "_id": carts[0]._id
+                                },
+                                function (err, cart) {
+                                    console.log(cart);
+                                    if (err) {
+                                        console.log("User Cart with id - " + carts[0]._id + " deleted failed - userId - " + req.body.userId);
+                                    } else {
+                                        console.log("User Cart with id - " + carts[0]._id + " deleted Succcessfully - userId" + req.body.userId);
+                                    }
+                                });
+                            res.json(order);
+                        }
+                    });
+                } else {
+                    res.json({ "status": "error", "message": "Cart not found" });
+                }
+            });
+        }
+        
     } else {
         res.json({ "status": "error", "message": "invalid inputs" });
     }
@@ -77,14 +116,91 @@ router.post('/placeOrder',(req,res,next) => {
 
 
 router.get('/list',(req,res,next) => {
-    order.find({},(err,orders) => {
-        if(err){
-            res.json({"status":"something went wrong while getting the orders"});
+    if(req.query.userId){
+        var aggregateQuery = [{ "$match": {"userId":new ObjectId(req.query.userId)} },{"$sort": {"created": -1}}];
+        var productJoinQuery = [
+            {
+                "$unwind": {
+                    "path": "$items",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "bongs",
+                    "localField": "items.bongId",
+                    "foreignField": "_id",
+                    "as": "product"
+                }
+            },
+            {
+                "$unwind": "$product"
+            },
+            {
+                "$group": {
+                    "_id": "$_id",
+                    "userId": {
+                        "$first": "$userId"
+                    },
+                    "address": {
+                        "$first": "$address"
+                    },
+                    "paymentMethod": {
+                        "$first": "$paymentMethod"
+                    },
+                    "status": {
+                        "$first": "$status"
+                    },
+                    "expectedDeliveryDate": {
+                        "$first": "$expectedDeliveryDate"
+                    },
+                    "deliveryDate": {
+                        "$first": "$deliveryDate"
+                    },
+                    "tax": {
+                        "$first": "$tax"
+                    },
+                    "updated" : {
+                        "$first": "$updated"
+                    },
+                    "created" : {
+                        "$first": "$created"
+                    },
+                    "items": {
+                        "$push": "$items"
+                    },
+                    "products": {
+                        "$push": "$product"
+                    }
+                }
+            }
+        ];
+        if(req.query.skip){
+            aggregateQuery.push({"$skip": parseInt(req.query.skip)});
         }
-        else{
-            res.json(orders);
+        if(req.query.limit){
+            aggregateQuery.push({"$limit": parseInt(req.query.limit)});
         }
-    });
+        aggregateQuery = aggregateQuery.concat(productJoinQuery);
+        Order.aggregate(aggregateQuery, function (err, orders) {
+                if (err) {
+                    res.json({ "status": "error",message:"Failed to fetch user Orders",error:err });
+                } else {
+                    if (orders && orders.length) {
+                        _.each(orders, function (order) {
+                            _.each(order.products, function (bong) {
+                                _.each(bong.images, function (image) {
+                                    image.imageUrl = image.url + "s/" + image.file.name;
+                                })
+                            });
+                        });
+                    }
+                    res.json(orders)
+                }
+            });
+    }  else {
+        res.json({ "status": "error", "message": "invalid inputs" });
+    }
 });
 
 
