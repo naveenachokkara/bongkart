@@ -30,7 +30,8 @@ router.post('/placeOrder',(req,res,next) => {
                     "bongId": item.bongId,
                     "quantity": item.quantity,
                     "price": item.price,
-                    "originalPrice": item.originalPrice
+                    "originalPrice": item.originalPrice,
+                    "status": "pending"
                 });
             })
             if (items.length) {
@@ -41,6 +42,18 @@ router.post('/placeOrder',(req,res,next) => {
                     if (err) {
                         res.json({ "status": "error", message: "Order creation error", error: err });
                     } else {
+                        Cart.findOneAndRemove(
+                                {
+                                    "userId": req.body.userId
+                                },
+                                function (err, cart) {
+                                    console.log(cart);
+                                    if (err) {
+                                        console.log("User Cart with id - " + carts[0]._id + " deleted failed - userId - " + req.body.userId);
+                                    } else {
+                                        console.log("User Cart with id - " + carts[0]._id + " deleted Succcessfully - userId" + req.body.userId);
+                                    }
+                                });
                         res.json(order);
                     }
                 });
@@ -74,7 +87,8 @@ router.post('/placeOrder',(req,res,next) => {
                                 "bongId": item.bongId,
                                 "quantity": item.quantity,
                                 "price": product.price,
-                                "originalPrice": product.originalPrice
+                                "originalPrice": product.originalPrice,
+                                "status":"pending"
                             });
                             products.push(product);
                         }

@@ -23,7 +23,12 @@ var OrderSchema = mongoose.Schema({
             "bongId":{type: Schema.Types.ObjectId, ref: 'Bong', require:true},
             "quantity": {type:Number,require:true},
             "price": Number,
-            "originalPrice": Number
+            "originalPrice": Number,
+            "status": String,
+            "updated": {
+                type: Date,
+                default: Date.now
+            }
         }
     ]
 });
