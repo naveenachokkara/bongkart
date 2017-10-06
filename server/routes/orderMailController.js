@@ -16,7 +16,7 @@ module.exports = {
                         console.log("Failed to send confirmation email for order ID - "+orderId);
                     } else if(user){
                         var html = orderTemplates.getOrderConformation(user,order);
-                        var subject = "Order Confirmation";
+                        var subject = "Order Confirmation - Your Order with Bongkart ["+orderId+"] has been successfully placed!";
                         var sendersMails = [user.email];
                         mailer.sendMail(sendersMails,subject,html);
                     } else {
