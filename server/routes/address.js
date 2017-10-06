@@ -47,7 +47,7 @@ router.put('/:id', (req, res, next) => {
         runValidators: true
     }, (err, address) => {
         if (err) {
-            res.json({ status: 'failure', message:"Failed to update address",error:err });
+            res.json({ status: 'error', message:"Failed to update address",error:err });
         }
         else {
             res.json(address);

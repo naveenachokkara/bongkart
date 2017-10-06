@@ -11,6 +11,7 @@ const extend = require('extend');
 const _ = require('underscore');
 const async = require('async');
 var ObjectId = mongoose.Types.ObjectId;
+const cartDAO = require('../daos/cartDAO');
 
 router.post('/addItem', (req, res) => {
     var reqData = {};
@@ -91,7 +92,7 @@ router.put('/updateItem', (req, res) => {
                     console.log(err);
                     res.json({ "status": "error" });
                 } else {
-                    getCartDetails(reqData, function (err, cart) {
+                    cartDAO.getCart(reqData, function (err, cart) {
                         if (err) {
                             res.json({ "status": "error" });
                         } else {
@@ -151,7 +152,7 @@ router.delete('/removeItem', (req, res) => {
 
 router.get('/details', (req, res) => {
     if (req.query.deviceId || req.query.userId) {
-        getCartDetails(req.query, function (err, cart) {
+        cartDAO.getCart(req.query, function (err, cart) {
             if (err) {
                 res.json({ "status": "error" });
             } else {
@@ -263,40 +264,4 @@ router.post('/mergeCarts', function (req, res) {
         res.json({ "status": "error", "message": "invalid inputs" });
     }
 });
-function getCartDetails(reqData, callback) {
-    var matchQuery = { "$match": {} };
-    if (reqData.userId) {
-        matchQuery["$match"]["userId"] = new ObjectId(reqData.userId);
-    } else if (reqData.deviceId) {
-        matchQuery["$match"]["deviceId"] = reqData.deviceId;
-    }
-    Cart.aggregate([
-        matchQuery,
-        {
-            "$unwind": { "path": "$items", "preserveNullAndEmptyArrays": true }
-        }, {
-            "$lookup": { "from": "bongs", "localField": "items.bongId", "foreignField": "_id", as: "products" }
-        }, {
-            "$unwind": "$products"
-        }, {
-            "$group": {
-                "_id": "$_id",
-                "items": { "$push": "$items" },
-                "products": { "$push": "$products" }
-            }
-        }], function (err, cart) {
-            if (err) {
-                callback(err);
-            } else {
-                if (cart && cart[0]) {
-                    _.each(cart[0].products, function (bong) {
-                        _.each(bong.images, function (image) {
-                            image.imageUrl = image.url + "s/" + image.file.name;
-                        })
-                    });
-                }
-                callback(null, cart);
-            }
-        });
-}
 module.exports = router;

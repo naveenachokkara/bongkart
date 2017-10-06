@@ -25,7 +25,7 @@ module.exports = {
                         <tr style="background: #EF6563;color: #FFFFFF;">
                             <th style="padding: 8px;">Product</th>
                             <th>Quantity</th>
-                            <th style="background: black;">Price</th>
+                            <th style="background: black;">Price/Unit</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -43,7 +43,7 @@ module.exports = {
                                 <div style="display: inline-block;vertical-align: top;padding: 10px;">`+ product.title + `</div>
                             </td>
                             <td style="border-bottom: 1px solid #e8e4e4;text-align: center;">`+ item.quantity + `</td>
-                            <td style="border-bottom: 1px solid #e8e4e4;text-align: center;">`+ (item.price * item.quantity) + `</td>
+                            <td style="border-bottom: 1px solid #e8e4e4;text-align: center;">`+ item.price + `</td>
                          </tr>`
             });
             html+=`</tbody>
@@ -102,6 +102,56 @@ module.exports = {
                         </td>
                     </tr>
                 </tbody>
+            </table>
+        </div>
+    </div>`;
+    return html;
+},
+getCancelOrderedItems: function(user,order,cancelledItems){
+        var html = `
+        <div style="width: 500px;background-color: #F2F2F2;font-family: arial,sans-serif;">
+            <div style="background: #EF6563;padding: 20px;font-size: 20px;color: #FFFFFF;text-align: center;">Order Cancellation</div>
+            <div style="padding: 10px;">
+                <table cellspacing="0" cellpadding="0" style="width:100%;padding-top:10px">
+                    <tbody>
+                        <tr>
+                            <td style="color:#29303f;text-align:left;background-color:#fff;padding:30px 10px 10px;font-size:14px;border:1px solid #ddd;border-radius:6px">
+                                <p style="margin-top:0;font-weight:bold;">Hi `+user.userName+`,</p>
+                                <p style="color:#94989f"> We would like to inform you that we have processed your cancellation request for the following items in the Order `+order._id+`
+                                </p>  
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table cellspacing="0" cellpadding="0" style="width:100%;font-size: 14px;background: #FFFFFF;background-color: #fff;border: 1px solid #ddd;border-radius: 6px;margin: 5px 0px;">
+                    <thead>
+                        <tr style="background: #EF6563;color: #FFFFFF;">
+                            <th style="padding: 8px;">Product</th>
+                            <th>Quantity</th>
+                            <th style="background: black;">Price/Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+            var items = order.items;
+            var itemsLength = items.length;
+            var products = order.products;
+            _.each(items, function (item) {
+                if (_.find(cancelledItems, function (cancelledItem) { return item.bongId.equals(cancelledItem) })) {
+                    var product = _.find(products, function (product) {
+                        return product._id.equals(item.bongId);
+                    });
+                    html += `<tr>
+                            <td style="border-bottom: 1px solid #e8e4e4;padding: 10px;">
+                                <img src="`+ (product.images && product.images.length && product.images[0].imageUrl) + `" style="height: 75px;display: inline-block;">
+                                <div style="display: inline-block;vertical-align: top;padding: 10px;">`+ product.title + `</div>
+                            </td>
+                            <td style="border-bottom: 1px solid #e8e4e4;text-align: center;">`+ item.quantity + `</td>
+                            <td style="border-bottom: 1px solid #e8e4e4;text-align: center;">`+ item.price + `</td>
+                         </tr>`;
+                }
+            });
+            html+=`</tbody>
             </table>
         </div>
     </div>`;

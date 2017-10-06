@@ -13,7 +13,7 @@ var OrderSchema = mongoose.Schema({
     "userId":{type: Schema.Types.ObjectId, ref: 'User' },
     "address":Schema.Types.Mixed,
     "paymentMethod":String,
-    "status": String,
+    "status": { type: String, enum: ['pending', 'cancelled'] },
     "expectedDeliveryDate": { type: Date }, 
     "deliveryDate": {type: Date},
     "tax": {type:Number,default:0},
@@ -24,7 +24,7 @@ var OrderSchema = mongoose.Schema({
             "quantity": {type:Number,require:true},
             "price": Number,
             "originalPrice": Number,
-            "status": String,
+            "status": { type: String, enum: ['pending', 'cancelled'] },
             "updated": {
                 type: Date,
                 default: Date.now

@@ -16,7 +16,7 @@ router.post('/create', (req, res, next) => {
     let newBong = new bong(req.body);
     newBong.save((err, bong) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json(bong);
@@ -96,7 +96,7 @@ router.post('/list', (req, res, next) => {
         }
         bong.aggregate(query, (err, bongs) => {
             if (err) {
-                res.json({ status: 'failure' });
+                res.json({ status: 'error' });
             }
             else {
                 if(req.body.userId){
@@ -122,7 +122,7 @@ router.post('/list', (req, res, next) => {
                         }
                     }, function (err, result) {
                         if(err){
-                            res.json({ status: 'failure' });
+                            res.status(400).json({ status: 'error' });
                         } else{
                             _.each(bongs, function (bong) {
                                 bong.inCart = _.find(result.cart && result.cart.items, function (item) { return bong._id.equals(item.bongId) }) ? true : false;
@@ -138,7 +138,7 @@ router.post('/list', (req, res, next) => {
                     // Finding whether it is in cart or not
                     Cart.findOne({ "deviceId": req.body.deviceId }, function (err, cart) {
                         if (err) {
-                            res.json({ status: 'failure' });
+                            res.json({ status: 'error' });
                         } else {
                             _.each(bongs, function (bong) {
                                 bong.inCart = _.find(cart && cart.items, function (item) { return bong._id.equals(item.bongId) }) ? true : false;
@@ -161,7 +161,7 @@ router.post('/list', (req, res, next) => {
             }
         });
     } catch (e) {
-        res.json({ status: 'failure' });
+        res.json({ status: 'error' });
     }
 });
 
@@ -169,7 +169,7 @@ router.post('/list', (req, res, next) => {
 router.get('/brands', (req, res, next) => {
     bong.find().distinct('brand', (err, bongs) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json(bongs);
@@ -180,7 +180,7 @@ router.get('/brands', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
     bong.find({ _id: req.params.id }, (err, bong) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json(bong);
@@ -192,7 +192,7 @@ router.get('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     bong.remove({ _id: req.params.id }, (err, bong) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json(bong);
@@ -203,7 +203,7 @@ router.delete('/:id', (req, res, next) => {
 router.put('/update/:id', (req, res, next) => {
     bong.findOneAndUpdate({ _id: req.params.id }, req.body, (err, bong) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json({ status: 'Bong is updated successfully' });
@@ -215,12 +215,12 @@ router.get('/refine/data', (req, res, next) => {
     var discounts = [];
     bong.aggregate([{ $project: { _id: 1, price: 1, originalPrice: 1, discount: { $multiply: [{ $floor: { $divide: [{ $multiply: [{ $divide: ["$price", "$originalPrice"] }, 100] }, 10] } }, 10] } } }, { $group: { _id: "$discount", total: { $sum: 1 } } }, { $sort: { "_id": 1 } }]).exec((err, discounts) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             bong.aggregate([{ $group: { _id: "$brand", total: { $sum: 1 } } }]).exec((err, brands) => {
                 if (err) {
-                    res.json({ status: 'failure' });
+                    res.json({ status: 'error' });
                 }
                 else {
                     var discountsLen = discounts.length;

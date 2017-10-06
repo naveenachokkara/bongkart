@@ -23,7 +23,7 @@ router.post('/create', (req, res, next) => {
 router.get('/list', (req, res, next) => {
     user.find({}, (err, users) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json(users);
@@ -34,7 +34,7 @@ router.get('/list', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
     user.find({ _id: req.params.id }, (err, user) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json(user);
@@ -46,7 +46,7 @@ router.get('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     user.remove({ _id: req.params.id }, (err, user) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json(user);
@@ -60,7 +60,7 @@ router.put('/update/:id', (req, res, next) => {
         runValidators: true
     }, (err, user) => {
         if (err) {
-            res.json({ status: 'failure' });
+            res.json({ status: 'error' });
         }
         else {
             res.json(user);
