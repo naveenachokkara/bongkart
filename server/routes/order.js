@@ -9,6 +9,9 @@ const Order = require('../models/order');
 const Cart = require('../models/cart');
 const _ = require('underscore');
 var ObjectId = mongoose.Types.ObjectId;
+const orderDAO = require('../daos/orderDAO');
+const orderMailController = require('./orderMailController');
+
 router.post('/placeOrder',(req,res,next) => {
     if(req.body.userId && req.body.address && req.body.expectedDeliveryDate){
         if(req.body.items){
@@ -54,6 +57,7 @@ router.post('/placeOrder',(req,res,next) => {
                                         console.log("User Cart with id - " + carts[0]._id + " deleted Succcessfully - userId" + req.body.userId);
                                     }
                                 });
+                        orderMailController.sendConfirmOrderMail(order._id);
                         res.json(order);
                     }
                 });
@@ -114,6 +118,7 @@ router.post('/placeOrder',(req,res,next) => {
                                         console.log("User Cart with id - " + carts[0]._id + " deleted Succcessfully - userId" + req.body.userId);
                                     }
                                 });
+                            orderMailController.sendConfirmOrderMail(order._id);
                             res.json(order);
                         }
                     });
@@ -218,16 +223,20 @@ router.get('/list',(req,res,next) => {
 });
 
 
-router.get("/:id",(req,res,next) => {
-    order.find({_id:req.params.id},(err,order) => {
-        if(err){
-            res.json({"status":"something went wrong to get order details"});
-        }
-        else{
-            res.json(order);
-        }
-    });
-
+router.get("/:id", (req, res, next) => {
+    if (req.params.id) {
+        orderDAO.getOrder(req.params.id, function (err, order) {
+            if (err) {
+                res.json({ "status": "error", "message": "Error getting order" });
+            } else if (order) {
+                res.json(order);
+            } else {
+                res.status(404).json({ "status": "success", "message": "Order not found" });
+            }
+        });
+    } else {
+        res.json({ "status": "error", "message": "invalid inputs" });
+    }
 });
 
 router.put('/update/:id',(req,res,next) => {
