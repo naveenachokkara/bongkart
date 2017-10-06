@@ -24,6 +24,7 @@ var OrderSchema = mongoose.Schema({
             "quantity": {type:Number,require:true},
             "price": Number,
             "originalPrice": Number,
+            "reasonForCancellation": String,
             "status": { type: String, enum: ['pending', 'cancelled'] },
             "updated": {
                 type: Date,

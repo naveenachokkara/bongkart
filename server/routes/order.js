@@ -252,6 +252,7 @@ router.put('/:id/cancelItems', (req, res, next) => {
                     if (_.find(cancelledItems,function(cancelledItem){return item.bongId.equals(cancelledItem)})) {
                         item.status = "cancelled";
                         item.updated = new Date().toISOString();
+                        item.reasonForCancellation = req.body.reason?req.body.reason:"";
                     } else {
                         totalAmount += item.price * item.quantity;
                     }
