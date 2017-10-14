@@ -7,16 +7,27 @@ const router = express.Router();
 const user = require('../models/user');
 
 router.post('/create', (req, res, next) => {
-    console.log(req.body);
-    let newUser = new user(req.body);
-    newUser.save((err, user) => {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.json(user);
-        }
-    });
+    if(req.body.facebookId){
+        user.findOne({facebookId:req.body.facebookId},function(err, userObj){
+            if(err){
+                res.status(400).json({ "status": "error", "message": "Failed to create user" });
+            } else if(userObj){
+                res.json(userObj);
+            } else {
+                let newUser = new user(req.body);
+                newUser.save((err, userObj) => {
+                    if (err) {
+                        res.status(400).json({ "status": "error", "message": "Failed to create user",error:err });
+                    }
+                    else {
+                        res.json(userObj);
+                    }
+                });
+            }
+        });
+    } else {
+        res.status(400).json({ "status": "error", "message": "invalid inputs" });
+    }
 });
 
 

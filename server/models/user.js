@@ -24,15 +24,7 @@ const UserSchema = mongoose.Schema({
    },
    "role":{
        type:String
-   },
-    "address":[{
-        "typeOfAddress":String,
-        "addressLine1":String,
-        "addressLine2":String,
-        "city":String,
-        "country":String,
-        "postalCode":String
-    }]
+   }
 });
 
 const user = module.exports = mongoose.model("User",UserSchema);
