@@ -14,10 +14,10 @@ module.exports = {
                 User.findOne({"_id":new ObjectId(order.userId)},function(userErr,user){
                     if(userErr){
                         console.log("Failed to send confirmation email for order ID - "+orderId);
-                    } else if(user){
+                    } else if(user && order && order.address && order.address.email){
                         var html = orderTemplates.getOrderConformation(user,order);
                         var subject = "Order Confirmation - Your Order with Bongkart ["+orderId+"] has been successfully placed!";
-                        var sendersMails = [user.email];
+                        var sendersMails = [order.address.email];
                         mailer.sendMail(sendersMails,subject,html);
                     } else {
                         console.log("Failed to send confirmation email for order ID - "+orderId);
@@ -36,10 +36,10 @@ module.exports = {
                 User.findOne({"_id":new ObjectId(order.userId)},function(userErr,user){
                     if(userErr){
                         console.log("Failed to send cancel order items email for order ID - "+orderId);
-                    } else if(user){
+                    } else if(user && order && order.address && order.address.email){
                         var html = orderTemplates.getCancelOrderedItems(user,order,cancelledItems);
                         var subject = "Cancellation of your Order "+ order._id +" with BongKart";
-                        var sendersMails = [user.email];
+                        var sendersMails = [order.address.email];
                         mailer.sendMail(sendersMails,subject,html);
                     } else {
                         console.log("Failed to send cancel order items email for order ID - "+orderId);

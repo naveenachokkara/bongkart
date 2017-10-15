@@ -4,6 +4,7 @@ const idvalidator = require('mongoose-id-validator');
 const Schema = mongoose.Schema;
 var AdsressSchema = mongoose.Schema({
     "userId": { type: Schema.Types.ObjectId, ref: 'User', require: true },
+    "email": { type:String },
     "pincode": { type: String },
     "name": { type: String },
     "address": { type: String },
