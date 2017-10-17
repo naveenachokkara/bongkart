@@ -53,9 +53,9 @@ router.post('/placeOrder', (req, res, next) => {
                             function (err, cart) {
                                 console.log(cart);
                                 if (err) {
-                                    console.log("User Cart with id - " + cart[0]._id + " deleted failed - userId - " + req.body.userId);
+                                    console.log("User Cart with id - " + cart._id + " deleted failed - userId - " + req.body.userId);
                                 } else {
-                                    console.log("User Cart with id - " + cart[0]._id + " deleted Succcessfully - userId" + req.body.userId);
+                                    console.log("User Cart with id - " + cart._id + " deleted Succcessfully - userId" + req.body.userId);
                                 }
                             });
                         orderMailController.sendConfirmOrderMail(order._id);
