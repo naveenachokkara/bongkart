@@ -36,6 +36,7 @@ router.post('/list', (req, res, next) => {
     var sortQuery = { $sort: {} };
     try {
         var reqQuery = req.body;
+        console.log(reqQuery);
         if ((reqQuery.matchBy && typeof reqQuery.matchBy.discount === "number") || (reqQuery.sortBy && (reqQuery.sortBy.discount === 1 || reqQuery.sortBy.discount === -1))) {
             query.push({
                 "$addFields": {
