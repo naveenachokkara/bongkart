@@ -94,6 +94,7 @@ router.post('/list', (req, res, next) => {
             sortQuery.$sort.created = 1;
             query.push(sortQuery);
         }
+        console.log("query",query);
         bong.aggregate(query, (err, bongs) => {
             if (err) {
                 res.json({ status: 'error' });
