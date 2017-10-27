@@ -238,4 +238,9 @@ router.get('/refine/data', (req, res, next) => {
     });
 });
 
+router.post('/bulkUpload',function(req,res){
+    console.log(req.body);
+    res.json({"status":"success"});
+})
+
 module.exports = router;

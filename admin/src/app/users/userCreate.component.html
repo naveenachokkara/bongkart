@@ -1,0 +1,91 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-header">
+          <strong>Horizontal</strong> Form
+        </div>
+        <div class="card-body">
+          <form [formGroup]="userForm" class="form-horizontal">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="userName">User Name</label>
+              <div class="col-md-9">
+                <input type="text" formControlName="userName" class="form-control" placeholder="User Name">
+               
+                <div *ngIf="userForm.get('userName').invalid && (userForm.get('userName').dirty ||userForm.get('userName').touched)" class="alert alert-danger">
+                  <div *ngIf="userForm.get('userName').hasError('required')">Please enter your userName</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="facebookId">Facebook Id</label>
+              <div class="col-md-9">
+                <input type="text" formControlName="facebookId" class="form-control" placeholder="Facebook Id">
+                <div *ngIf="userForm.get('facebookId').invalid && (userForm.get('facebookId').dirty ||userForm.get('facebookId').touched)" class="alert alert-danger">
+                  <div *ngIf="userForm.get('facebookId').hasError('required')">Please enter your facebook Id</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email">Email</label>
+              <div class="col-md-9">
+                <input type="email" formControlName="email" class="form-control" placeholder="Enter Email..">
+                <div *ngIf="userForm.get('email').invalid && (userForm.get('email').dirty ||userForm.get('email').touched)" class="alert alert-danger">
+                  <div *ngIf="userForm.get('email').hasError('required')">Please enter your email</div>
+                  <div *ngIf="userForm.get('email').hasError('email')">Please enter valid email</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="phoneNumber">Phone Number</label>
+              <div class="col-md-9">
+                <input type="number" formControlName="phoneNumber" class="form-control" placeholder="Phone Number">
+                 <div *ngIf="userForm.get('phoneNumber').invalid && (userForm.get('phoneNumber').dirty ||userForm.get('phoneNumber').touched)" class="alert alert-danger">
+                  <div *ngIf="userForm.get('phoneNumber').hasError('required')">Please enter your phone number</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+                    <label class="col-md-3 form-control-label">Gender</label>
+                    <div class="col-md-9">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" formControlName="gender" value="male" >
+                                Male
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" formControlName="gender" value="female">
+                                Female
+                            </label>
+                        </div>
+                        <div *ngIf="userForm.get('gender').invalid && (userForm.get('gender').dirty ||userForm.get('gender').touched)"
+                          class="alert alert-danger">
+                          <div *ngIf="userForm.get('gender').hasError('required')">Please select gender</div>
+                        </div>
+                    </div>
+                </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="role">Role</label>
+              <div class="col-md-9">
+                <input type="text" formControlName="role" class="form-control" placeholder="Role">
+                <div *ngIf="userForm.get('role').invalid && (userForm.get('role').dirty ||userForm.get('role').touched)" class="alert alert-danger">
+                  <div *ngIf="userForm.get('role').hasError('required')">Please enter role</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="dateOfBirth">Date of Birth</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control"  bsDatepicker formControlName="dateOfBirth">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="userForm.invalid || userForm.pending" (click)="createUser()" [hidden]="isUpdateUser"> Submit</button>
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="userForm.invalid || userForm.pending" (click)="updateUser()" [hidden]="!isUpdateUser"> Update</button>
+          <button type="button" class="btn btn-sm btn-secondary" routerLinkActive="active" [routerLink]="['/users/list']" [hidden]="!isUpdateUser"> Cancel</button>
+          <button type="reset" class="btn btn-sm btn-danger" (click)="revert()" [disabled]="userForm.pristine" [hidden]="isUpdateUser"><i class="fa fa-ban"></i> Reset</button>
+        </div>
+      </div>
+</div>
