@@ -13,6 +13,7 @@
     "body-parser": "*",
     "cors": "*",
     "express": "*",
+    "image-downloader": "^3.3.0",
     "jsonwebtoken": "*",
     "moment": "^2.18.1",
     "mongoose": "*",

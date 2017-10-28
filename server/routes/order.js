@@ -12,6 +12,7 @@ var ObjectId = mongoose.Types.ObjectId;
 const orderDAO = require('../daos/orderDAO');
 const cartDAO = require('../daos/cartDAO');
 const orderMailController = require('./orderMailController');
+const config = require('../configuration/config.json');
 
 router.post('/placeOrder', (req, res, next) => {
     if (req.body.userId && req.body.address && req.body.expectedDeliveryDate) {
@@ -210,7 +211,11 @@ router.get('/list', (req, res, next) => {
                     _.each(orders, function (order) {
                         _.each(order.products, function (bong) {
                             _.each(bong.images, function (image) {
-                                image.imageUrl = image.url + "s/" + image.file.name;
+                                if (image.relativeURL) {
+                                    image.imageUrl = config.serverURI + image.relativeURL;
+                                } else {
+                                    image.imageUrl = image.url + "s/" + image.file.name;
+                                }
                             })
                         });
                     });

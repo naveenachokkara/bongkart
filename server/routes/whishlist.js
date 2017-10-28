@@ -5,6 +5,7 @@ const WhishList = require('../models/whishlist');
 const _ = require('underscore');
 const mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
+const config = require('../configuration/config.json');
 router.post('/addItem', (req, res) => {
     var reqData = {
         "userId": req.body.userId,
@@ -126,7 +127,11 @@ function getWhishList(reqData, callback) {
             if (whishlist && whishlist[0]) {
                 _.each(whishlist[0].products, function (bong) {
                     _.each(bong.images, function (image) {
-                        image.imageUrl = image.url + "s/" + image.file.name;
+                        if (image.relativeURL) {
+                            image.imageUrl = config.serverURI + image.relativeURL;
+                        } else {
+                            image.imageUrl = image.url + "s/" + image.file.name;
+                        }
                     })
                 });
             }

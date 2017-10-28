@@ -11,12 +11,14 @@ const _ = require('underscore');
 const WhishList = require('../models/whishlist');
 const Cart = require('../models/cart');
 const async = require('async');
-
+const downloader = require('image-downloader');
+const uuid = require('uuid');
+const config = require('../configuration/config.json');
 router.post('/create', (req, res, next) => {
     let newBong = new bong(req.body);
     newBong.save((err, bong) => {
         if (err) {
-            res.json({ status: 'error' });
+            res.status(400).json({ status: 'error' });
         }
         else {
             res.json(bong);
@@ -95,13 +97,13 @@ router.post('/list', (req, res, next) => {
             sortQuery.$sort.created = 1;
             query.push(sortQuery);
         }
-        console.log("query",query);
+        console.log("query", query);
         bong.aggregate(query, (err, bongs) => {
             if (err) {
-                res.json({ status: 'error' });
+                res.status(400).json({ status: 'error' });
             }
             else {
-                if(req.body.userId){
+                if (req.body.userId) {
                     // Finding whether it is in cart or whishlist
                     async.parallel({
                         cart: function (done) {
@@ -123,30 +125,38 @@ router.post('/list', (req, res, next) => {
                             });
                         }
                     }, function (err, result) {
-                        if(err){
+                        if (err) {
                             res.status(400).json({ status: 'error' });
-                        } else{
+                        } else {
                             _.each(bongs, function (bong) {
                                 bong.inCart = _.find(result.cart && result.cart.items, function (item) { return bong._id.equals(item.bongId) }) ? true : false;
                                 bong.inWhishlist = _.find(result.whishlist && result.whishlist.items, function (item) { return bong._id.equals(item.bongId) }) ? true : false;
                                 _.each(bong.images, function (image) {
-                                    image.imageUrl = image.url + "s/" + image.file.name;
+                                    if (image.relativeURL) {
+                                        image.imageUrl = config.serverURI + image.relativeURL;
+                                    } else {
+                                        image.imageUrl = image.url + "s/" + image.file.name;
+                                    }
                                 });
                             });
                             res.json(bongs);
                         }
                     });
-                } else if(req.body.deviceId){
+                } else if (req.body.deviceId) {
                     // Finding whether it is in cart or not
                     Cart.findOne({ "deviceId": req.body.deviceId }, function (err, cart) {
                         if (err) {
-                            res.json({ status: 'error' });
+                           res.status(400).json({ status: 'error' });
                         } else {
                             _.each(bongs, function (bong) {
                                 bong.inCart = _.find(cart && cart.items, function (item) { return bong._id.equals(item.bongId) }) ? true : false;
                                 bong.inWhishlist = false;
                                 _.each(bong.images, function (image) {
-                                    image.imageUrl = image.url + "s/" + image.file.name;
+                                    if (image.relativeURL) {
+                                        image.imageUrl = config.serverURI + image.relativeURL;
+                                    } else {
+                                        image.imageUrl = image.url + "s/" + image.file.name;
+                                    }
                                 });
                             });
                             res.json(bongs);
@@ -155,7 +165,11 @@ router.post('/list', (req, res, next) => {
                 } else {
                     _.each(bongs, function (bong) {
                         _.each(bong.images, function (image) {
-                            image.imageUrl = image.url + "s/" + image.file.name;
+                            if (image.relativeURL) {
+                                image.imageUrl = config.serverURI + image.relativeURL;
+                            } else {
+                                image.imageUrl = image.url + "s/" + image.file.name;
+                            }
                         });
                     });
                     res.json(bongs);
@@ -163,7 +177,7 @@ router.post('/list', (req, res, next) => {
             }
         });
     } catch (e) {
-        res.json({ status: 'error' });
+        res.status(400).json({ status: 'error' });
     }
 });
 
@@ -194,7 +208,7 @@ router.get('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     bong.remove({ _id: req.params.id }, (err, bong) => {
         if (err) {
-            res.json({ status: 'error' });
+            res.status(400).json({ status: 'error' });
         }
         else {
             res.json(bong);
@@ -205,7 +219,7 @@ router.delete('/:id', (req, res, next) => {
 router.put('/update/:id', (req, res, next) => {
     bong.findOneAndUpdate({ _id: req.params.id }, req.body, (err, bong) => {
         if (err) {
-            res.json({ status: 'error' });
+            res.status(400).json({ status: 'error' });
         }
         else {
             res.json({ status: 'Bong is updated successfully' });
@@ -217,12 +231,12 @@ router.get('/refine/data', (req, res, next) => {
     var discounts = [];
     bong.aggregate([{ $project: { _id: 1, price: 1, originalPrice: 1, discount: { $multiply: [{ $floor: { $divide: [{ $multiply: [{ $divide: ["$price", "$originalPrice"] }, 100] }, 10] } }, 10] } } }, { $group: { _id: "$discount", total: { $sum: 1 } } }, { $sort: { "_id": 1 } }]).exec((err, discounts) => {
         if (err) {
-            res.json({ status: 'error' });
+            res.status(400).json({ status: 'error' });
         }
         else {
             bong.aggregate([{ $group: { _id: "$brand", total: { $sum: 1 } } }]).exec((err, brands) => {
                 if (err) {
-                    res.json({ status: 'error' });
+                    res.status(400).json({ status: 'error' });
                 }
                 else {
                     var discountsLen = discounts.length;
@@ -238,9 +252,49 @@ router.get('/refine/data', (req, res, next) => {
     });
 });
 
-router.post('/bulkUpload',function(req,res){
-    console.log(req.body);
-    res.json({"status":"success"});
+router.post('/bulkUpload', function (req, res) {
+    var rawBongs = req.body;
+    var parsedBongs = [];
+    async.mapValues(rawBongs, function (value, key, callback) {
+        var images = value.images.split(',');
+        async.mapValues(images, function (value, key, imageCallback) {
+            try {
+                var fileName = 'uploads/' + (uuid()) + '-' + key + '-' + value.substring(value.lastIndexOf('/') + 1, value.lastIndexOf('.')) + value.substr(value.lastIndexOf('.'), value.length);
+                //fs.openSync(fileName,'w');
+                var options = {
+                    url: value,
+                    dest: fileName,        // Save to /path/to/dest/photo.jpg
+                    done: function (err, filename, image) {
+                        imageCallback(err, { relativeURL: filename })
+                    }
+                }
+                downloader(options);
+            } catch (e) {
+                imageCallback(e);
+            }
+
+        }, function (err, results) {
+            var parsedBong = JSON.parse(JSON.stringify(value));
+            parsedBong.images = [];
+            _.each(results, function (value) {
+                parsedBong.images.push(value);
+            });
+            parsedBongs.push(parsedBong);
+            callback(err, results)
+        })
+    }, function (err, results) {
+        if (err) {
+            res.status(400).json({ "status": "error", "error": err });
+        } else {
+            bong.create(parsedBongs, function (err, results) {
+                if (err) {
+                    res.status(400).json({ "status": "error", "error": err });
+                } else {
+                    res.json({ "status": "success" });
+                }
+            });
+        }
+    })
 })
 
 module.exports = router;

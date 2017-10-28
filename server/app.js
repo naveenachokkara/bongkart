@@ -33,7 +33,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 //define the type of upload multer would be doing and pass in its destination, in our case, its a single file with the name photo
 const storage = multer.diskStorage({ //multers disk storage settings
     destination: function (req, file, cb) {
-        cb(null, './uploads/')
+        cb(null, 'uploads/')
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -50,11 +50,12 @@ app.get('/',(req,res,next) => {
 /** API path that will upload the files */
 app.post('/upload', function(req, res) {
     upload(req,res,function(err){
+        console.log(err);
         if(err){
             res.json({error_code:1,err_desc:err});
-            return;
+        } else{
+            res.json({error_code:0,err_desc:null});
         }
-        res.json({error_code:0,err_desc:null});
     })
 });
 

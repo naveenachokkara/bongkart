@@ -29,13 +29,13 @@ export class UserCreate{
         if(this.isUpdateUser){
             this.spinnerService.show();
             this.route.params.subscribe(params => {
-                this.userService.getUser(params.id).then(data => {
+                this.userService.getUser(params.id).then((data) => {
                     this.spinnerService.hide();
                     this.currentUser = data;
                     this.userForm.setValue({userName:data.userName,facebookId:data.facebookId,email:data.email,phoneNumber:data.phoneNumber,gender:data.gender,role:data.role,dateOfBirth:data.dateOfBirth});
                 }, (data) => {
                     this.spinnerService.hide();
-                    this.toastr.success('Failed to fetch user details');
+                    this.toastr.error('Failed to fetch user details');
                     this.router.navigate(["users", 'list'])
                 })
             });
@@ -48,24 +48,24 @@ export class UserCreate{
      }
      createUser(){
          this.spinnerService.show();
-         this.userService.createUser(this.userForm.value).then(data => {
+         this.userService.createUser(this.userForm.value).then((data) => {
             this.spinnerService.hide();
             this.toastr.success('User created successfully');
             this.router.navigate(["users",'list'])
         },(data)=>{
             this.spinnerService.hide();
-            this.toastr.success('Failed to create user');
+            this.toastr.error('Failed to create user');
         })
      }
      updateUser(){
          this.spinnerService.show();
-         this.userService.updateUser(this.currentUser._id,this.userForm.value).then(data => {
+         this.userService.updateUser(this.currentUser._id,this.userForm.value).then((data) => {
             this.spinnerService.hide();
             this.toastr.success('User updated successfully');
             this.router.navigate(["users",'list']);
         },(data)=>{
             this.spinnerService.hide();
-            this.toastr.success('Failed to update user');
+            this.toastr.error('Failed to update user');
             this.router.navigate(["users",'list']);
         })
      }

@@ -77,7 +77,11 @@ module.exports = {
                     _.each(orders, function (order) {
                         _.each(order.products, function (bong) {
                             _.each(bong.images, function (image) {
-                                image.imageUrl = image.url + "s/" + image.file.name;
+                                if (image.relativeURL) {
+                                    image.imageUrl = config.serverURI + image.relativeURL;
+                                } else {
+                                    image.imageUrl = image.url + "s/" + image.file.name;
+                                }
                             })
                         });
                     });

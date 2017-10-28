@@ -5,6 +5,7 @@
             <div class="pull-right">
                 <input type="file" (change)="onFileChange($event)" multiple="false" #bongXLS style='display:none;'/>
                 <button class="btn btn-sm btn-primary" (click)='bongXLS.click()'>Import Bongs</button>
+                <button class="btn btn-sm btn-primary" (click)='exportBongs()'>Export Bongs</button>
                 <button  class="btn btn-sm btn-primary">Add New</button>
             </div>
         </div>

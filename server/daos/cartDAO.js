@@ -5,6 +5,7 @@ const _ = require('underscore');
 const router = express.Router();
 const Cart = require('../models/cart');
 const ObjectId = mongoose.Types.ObjectId;
+const config = require('../configuration/config.json');
 module.exports = {
     getCart: function (reqData, callback) {
         var matchQuery = { "$match": {} };
@@ -34,7 +35,11 @@ module.exports = {
                     if (cart && cart[0]) {
                         _.each(cart[0].products, function (bong) {
                             _.each(bong.images, function (image) {
-                                image.imageUrl = image.url + "s/" + image.file.name;
+                                if (image.relativeURL) {
+                                    image.imageUrl = config.serverURI + image.relativeURL;
+                                } else {
+                                    image.imageUrl = image.url + "s/" + image.file.name;
+                                }
                             })
                         });
                     }

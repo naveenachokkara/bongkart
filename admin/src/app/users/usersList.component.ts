@@ -22,7 +22,7 @@ export class UsersList{
 
     }
     ngOnInit(): void {
-        this.userService.getUsers().then(users => {
+        this.userService.getUsers().then((users) => {
             console.log(users);
             this.users = users;
         })
@@ -37,7 +37,7 @@ export class UsersList{
             if(this.bsModalRef){
                 if(this.bsModalRef.content.deleteUser=="YES"){
                     this.spinnerService.show();
-                    this.userService.deleteUser(this.currentUser._id).then(data => {
+                    this.userService.deleteUser(this.currentUser._id).then((data) => {
                         this.toastr.success('User deleted successfully');
                         this.spinnerService.hide();    
                         this.ngOnInit();
