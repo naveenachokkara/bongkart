@@ -94,6 +94,7 @@ export class BongsList {
                 return buf;
             }
             saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), "bongs.xlsx");
+            this.spinnerService.hide();
         }, (data) => {
             this.spinnerService.hide();
             this.toastr.error("Failed to export bongs");
