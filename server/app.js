@@ -21,6 +21,7 @@ const multer = require('multer');
 // set the directory for the uploads to the uploaded to
 const DIR = './uploads/';
 const port = process.env.PORT || 3000;
+const uuid = require('uuid');
 
 
 const app = express();
@@ -36,7 +37,7 @@ const storage = multer.diskStorage({ //multers disk storage settings
         cb(null, 'uploads/')
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname);
+        cb(null, uuid()+'-'+file.originalname);
     }
 });
 const upload = multer({ //multer settings
@@ -50,11 +51,10 @@ app.get('/',(req,res,next) => {
 /** API path that will upload the files */
 app.post('/upload', function(req, res) {
     upload(req,res,function(err){
-        console.log(err);
         if(err){
-            res.json({error_code:1,err_desc:err});
+            res.status(400).json({error_code:1,err_desc:err});
         } else{
-            res.json({error_code:0,err_desc:null});
+            res.json({error_code:0,err_desc:null,file:req.file});
         }
     })
 });
