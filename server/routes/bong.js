@@ -14,6 +14,7 @@ const async = require('async');
 const downloader = require('image-downloader');
 const uuid = require('uuid');
 const config = require('../configuration/config.json');
+const productDAO = require('../daos/productDAO');
 router.post('/create', (req, res, next) => {
     let newBong = new bong(req.body);
     newBong.save((err, bong) => {
@@ -28,157 +29,13 @@ router.post('/create', (req, res, next) => {
 
 
 router.post('/list', (req, res, next) => {
-    var conditionalQery = {};
-    var skip = 0;
-    var query = [];
-    var matchQuery = {
-        "$match": {
+    productDAO.getBongs(req.body,(err,bongs) => {
+        if(err){
+            res.status(400).json({"status":"error"});
+        } else {
+            res.send(bongs);
         }
-    };
-    var sortQuery = { $sort: {} };
-    try {
-        var reqQuery = req.body;
-        console.log(reqQuery);
-        if ((reqQuery.matchBy && typeof reqQuery.matchBy.discount === "number") || (reqQuery.sortBy && (reqQuery.sortBy.discount === 1 || reqQuery.sortBy.discount === -1))) {
-            query.push({
-                "$addFields": {
-                    "discount": {
-                        "$multiply": [
-                            {
-                                "$divide": [
-                                    "$price",
-                                    "$originalPrice"
-                                ]
-                            },
-                            100
-                        ]
-                    }
-                }
-            });
-            matchQuery.$match.discount = { $gte: reqQuery.matchBy.discount };
-        }
-        if (reqQuery.matchBy && reqQuery.matchBy.brands && Array.isArray(reqQuery.matchBy.brands) && reqQuery.matchBy.brands.length) {
-            matchQuery.$match.brand = { "$in": reqQuery.matchBy.brands };
-        }
-        if (Object.keys(matchQuery.$match).length > 0) {
-            query.push(matchQuery);
-        }
-        if (reqQuery.sortBy) {
-            _.each(reqQuery.sortBy, function (val, key) {
-                console.log(val, key);
-                val = parseInt(val);
-                if (val === -1 || val === 1) {
-                    switch (key) {
-                        case "time":
-                            sortQuery.$sort.created = val;
-                            break;
-                        case "price":
-                            sortQuery.$sort.price = val;
-                            break;
-                        case "discount":
-                            sortQuery.$sort.discount = val;
-                            break;
-                    }
-                }
-            });
-
-        }
-        if (Object.keys(sortQuery.$sort).length > 0) {
-            query.push(sortQuery);
-        }
-        if (reqQuery.skip) {
-            query.push({ $skip: parseInt(reqQuery.skip) });
-        }
-
-        if (reqQuery.limit) {
-            query.push({ $limit: parseInt(reqQuery.limit) });
-        }
-        if (query.length === 0) {
-            sortQuery.$sort.created = 1;
-            query.push(sortQuery);
-        }
-        console.log("query", query);
-        bong.aggregate(query, (err, bongs) => {
-            if (err) {
-                res.status(400).json({ status: 'error' });
-            }
-            else {
-                if (req.body.userId) {
-                    // Finding whether it is in cart or whishlist
-                    async.parallel({
-                        cart: function (done) {
-                            Cart.findOne({ "userId": req.body.userId }, function (err, cart) {
-                                if (err) {
-                                    done(err);
-                                } else {
-                                    done(null, cart);
-                                }
-                            });
-                        },
-                        whishlist: function (done) {
-                            WhishList.findOne({ "userId": req.body.userId }, function (err, whishlist) {
-                                if (err) {
-                                    done(err);
-                                } else {
-                                    done(null, whishlist);
-                                }
-                            });
-                        }
-                    }, function (err, result) {
-                        if (err) {
-                            res.status(400).json({ status: 'error' });
-                        } else {
-                            _.each(bongs, function (bong) {
-                                bong.inCart = _.find(result.cart && result.cart.items, function (item) { return bong._id.equals(item.bongId) }) ? true : false;
-                                bong.inWhishlist = _.find(result.whishlist && result.whishlist.items, function (item) { return bong._id.equals(item.bongId) }) ? true : false;
-                                _.each(bong.images, function (image) {
-                                    if (image.relativeURL) {
-                                        image.imageUrl = config.serverURI + image.relativeURL;
-                                    } else {
-                                        image.imageUrl = image.url + "s/" + image.file.name;
-                                    }
-                                });
-                            });
-                            res.json(bongs);
-                        }
-                    });
-                } else if (req.body.deviceId) {
-                    // Finding whether it is in cart or not
-                    Cart.findOne({ "deviceId": req.body.deviceId }, function (err, cart) {
-                        if (err) {
-                           res.status(400).json({ status: 'error' });
-                        } else {
-                            _.each(bongs, function (bong) {
-                                bong.inCart = _.find(cart && cart.items, function (item) { return bong._id.equals(item.bongId) }) ? true : false;
-                                bong.inWhishlist = false;
-                                _.each(bong.images, function (image) {
-                                    if (image.relativeURL) {
-                                        image.imageUrl = config.serverURI + image.relativeURL;
-                                    } else {
-                                        image.imageUrl = image.url + "s/" + image.file.name;
-                                    }
-                                });
-                            });
-                            res.json(bongs);
-                        }
-                    });
-                } else {
-                    _.each(bongs, function (bong) {
-                        _.each(bong.images, function (image) {
-                            if (image.relativeURL) {
-                                image.imageUrl = config.serverURI + image.relativeURL;
-                            } else {
-                                image.imageUrl = image.url + "s/" + image.file.name;
-                            }
-                        });
-                    });
-                    res.json(bongs);
-                }
-            }
-        });
-    } catch (e) {
-        res.status(400).json({ status: 'error' });
-    }
+    });
 });
 
 
@@ -189,6 +46,45 @@ router.get('/brands', (req, res, next) => {
         }
         else {
             res.json(bongs);
+        }
+    });
+});
+
+router.get('/home',function(req,res){
+    async.parallel({
+        discounts:function(done){
+            var reqQuery = {
+                "userId":req.query.userId,
+                "deviceId":req.query.deviceId,
+                "sortBy":{
+                    "discount":-1
+                },
+                "skip":0,
+                "limit":10
+            }
+            productDAO.getBongs(reqQuery, (err, bongs) => {
+                done(err,bongs);
+            });
+        },
+        latestItems:function(done){
+            var reqQuery = {
+                "userId":req.query.userId,
+                "deviceId":req.query.deviceId,
+                "sortBy":{
+                    "time":-1
+                },
+                "skip":0,
+                "limit":10
+            }
+            productDAO.getBongs(reqQuery, (err, bongs) => {
+                done(err,bongs);
+            });
+        }
+    },function(err,result){
+        if(err){
+            res.status(400).json({"status":"error","error":err});
+        } else {
+            res.json(result);
         }
     });
 });
@@ -229,7 +125,20 @@ router.put('/update/:id', (req, res, next) => {
 
 router.get('/refine/data', (req, res, next) => {
     var discounts = [];
-    bong.aggregate([{ $project: { _id: 1, price: 1, originalPrice: 1, discount: { $multiply: [{ $floor: { $divide: [{ $multiply: [{ $divide: ["$price", "$originalPrice"] }, 100] }, 10] } }, 10] } } }, { $group: { _id: "$discount", total: { $sum: 1 } } }, { $sort: { "_id": 1 } }]).exec((err, discounts) => {
+    var discountExpression = {
+        "$subtract": [100, {
+            "$multiply": [
+                {
+                    "$divide": [
+                        "$price",
+                        "$originalPrice"
+                    ]
+                },
+                100
+            ]
+        }]
+    };
+    bong.aggregate([{ $project: { _id: 1, price: 1, originalPrice: 1, discount: { $multiply: [{ $floor: { $divide: [discountExpression, 10] } }, 10] } } }, { $group: { _id: "$discount", total: { $sum: 1 } } }, { $sort: { "_id": 1 } }]).exec((err, discounts) => {
         if (err) {
             res.status(400).json({ status: 'error' });
         }
@@ -296,5 +205,4 @@ router.post('/bulkUpload', function (req, res) {
         }
     })
 })
-
 module.exports = router;
