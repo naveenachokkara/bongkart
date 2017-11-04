@@ -16,12 +16,14 @@ const order = require('./routes/order');
 const cart = require('./routes/cart');
 const address = require('./routes/address');
 const whishList = require('./routes/whishlist');
+const brand = require('./routes/brand');
 //require multer for the file uploads
 const multer = require('multer');
 // set the directory for the uploads to the uploaded to
 const DIR = './uploads/';
 const port = process.env.PORT || 3000;
 const uuid = require('uuid');
+const fs = require('fs');
 
 
 const app = express();
@@ -59,6 +61,17 @@ app.post('/upload', function(req, res) {
     })
 });
 
+/** API path that will delete a file */
+app.delete('/resource', function(req, res) {
+    fs.unlink(req.body.relativeURL, (err) => {
+        if(err){
+            res.status(400).json({"status":"error","error":err,"message":"Failed to delete resource"});
+        } else{
+            res.json({"status":"success","message":"Resource deleted successfully"});
+        }
+    });
+});
+
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
 mongoose.connection.on('connected',() => {
@@ -75,6 +88,7 @@ app.use('/order',order);
 app.use('/cart',cart);
 app.use('/address',address);
 app.use('/whishList',whishList);
+app.use('/brand',brand);
 
 app.listen(port,() => {
     console.log('server is connected at port '+port);
