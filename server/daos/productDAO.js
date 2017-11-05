@@ -9,7 +9,7 @@ const Cart = require('../models/cart');
 const ObjectId = mongoose.Types.ObjectId;
 const config = require('../configuration/config.json');
 const async = require('async');
-function addImageURL(bongs) {
+function addImageURL(bong) {
     _.each(bong.images, function (image) {
         if (image.relativeURL) {
             image.imageUrl = config.serverURI + image.relativeURL;
