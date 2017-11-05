@@ -1,0 +1,36 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-header">
+          <strong>Brand</strong> Form
+        </div>
+        <div class="card-body">
+          <form [formGroup]="brandForm" class="form-horizontal">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="brandName" >Brand</label>
+              <div class="col-md-9">
+                <input type="text" formControlName="brandName" class="form-control" placeholder="Brand">
+               
+                <div *ngIf="brandForm.get('brandName').invalid && (brandForm.get('brandName').dirty ||brandForm.get('brandName').touched)" class="alert alert-danger">
+                  <div *ngIf="brandForm.get('brandName').hasError('required')">Please enter brand</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="brandImage">Logo</label>
+              <div class="col-md-9">
+                 <input type="file" (change)="onFileChange($event)" multiple="false" #brandImage/>
+                <!--<div *ngIf="userForm.get('facebookId').invalid && (userForm.get('facebookId').dirty ||userForm.get('facebookId').touched)" class="alert alert-danger">
+                  <div *ngIf="userForm.get('facebookId').hasError('required')">Please enter your facebook Id</div>
+                </div>-->
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="brandForm.invalid || brandForm.pending" (click)="createBrand()" [hidden]="isUpdateBrand"> Submit</button>
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="brandForm.invalid || brandForm.pending" (click)="updateBrand()" [hidden]="!isUpdateBrand"> Update</button>
+          <button type="button" class="btn btn-sm btn-secondary" routerLinkActive="active" [routerLink]="['/brands/list']" [hidden]="!isUpdateBrand"> Cancel</button>
+          <button type="reset" class="btn btn-sm btn-danger" (click)="revert()" [disabled]="brandForm.pristine" [hidden]="isUpdateBrand"><i class="fa fa-ban"></i> Reset</button>
+        </div>
+      </div>
+</div>

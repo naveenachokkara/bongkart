@@ -18,25 +18,33 @@ router.post('/', function (req, res) {
     });
 });
 
+router.get('/list', function (req, res) {
+    Brand.find({}, (err, brands) => {
+        if (err) {
+            res.status(400).json({ "status": "error" ,message:"Failed to fetch brands",error:err });
+        } else {
+            res.json(brands);
+        }
+    });
+});
+
 router.get('/:id', function (req, res) {
     Brand.findOne({ _id: req.params.id }, (err, brand) => {
         if (err) {
-            res.json({ "status": "error" ,message:"Failed to fetch brand",error:err });
+            res.status(400).json({ "status": "error" ,message:"Failed to fetch brand",error:err });
         } else {
             res.json(brand);
         }
     });
 });
+
 router.put('/:id', (req, res, next) => {
-    req.body["$currentDate"] = {
-        "updated": true
-    };
-    Brand.findOneAndUpdate({ _id: req.params.id}, req.body, {
+    Brand.findOneAndUpdate({ _id: req.params.id}, {"$set":req.body,"$currentDate":{updated:true}}, {
         new: true,
         runValidators: true
     }, (err, brand) => {
         if (err) {
-            res.json({ status: 'error', message:"Failed to update brand",error:err });
+            res.status(400).json({ status: 'error', message:"Failed to update brand",error:err });
         }
         else {
             res.json(brand);

@@ -27,8 +27,11 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
 //Services
 import {BongService} from './services/bong.service';
 import {UserService} from './services/user.service';
+import {BrandService} from './services/brand.service';
 import {UsersModule} from './users/users.module';
 import{UserDeleteConfirmModal} from './users/usersList.component';
+import {BrandsModule} from './brands/brands.module';
+import{BrandDeleteConfirmModal} from './brands/brandsList.component';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 @NgModule({
@@ -38,6 +41,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     ReactiveFormsModule,
     AppRoutingModule,
     UsersModule,
+    BrandsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ChartsModule,
@@ -60,9 +64,10 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     useClass: HashLocationStrategy
   },
     BongService,
-    UserService
+    UserService,
+    BrandService
   ],
-  entryComponents:[UserDeleteConfirmModal],
+  entryComponents:[UserDeleteConfirmModal,BrandDeleteConfirmModal],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

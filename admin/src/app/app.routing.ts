@@ -27,6 +27,9 @@ export const routes: Routes = [
       },{
         path: 'bongs',
         loadChildren: './bongs/bongs.module#BongsModule'
+      },{
+        path: 'brands',
+        loadChildren: './brands/brands.module#BrandsModule'
       }
     ]
   }

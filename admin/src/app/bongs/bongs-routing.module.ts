@@ -12,6 +12,11 @@ const routes: Routes = [
         },
         children:[
             {
+                path:'',
+                redirectTo:'list',
+                pathMatch:'full'
+            },
+            {
                 path:'list',
                 component: BongsList
             }
