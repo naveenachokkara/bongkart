@@ -2,6 +2,10 @@
  * Created by SESA435400 on 4/29/2017.
  */
 const mongoose = require('mongoose');
+const async = require('async');
+const fs = require('fs');
+const idvalidator = require('mongoose-id-validator');
+const Schema = mongoose.Schema;
 
 const BongSchema = mongoose.Schema({
     "title":{
@@ -16,8 +20,10 @@ const BongSchema = mongoose.Schema({
     "description":{
         type:String
     },
-    "brand":{
-        type:String
+    "brandId":{
+        type: Schema.Types.ObjectId, 
+        ref: 'Brand', 
+        require:true 
     },
     "modelNumber":{
         type:String
@@ -52,4 +58,18 @@ const BongSchema = mongoose.Schema({
     }
 });
 
+BongSchema.pre('remove',function(next){
+    async.each(this.images, function (image, callback) {
+        if(image.relativeURL){
+            fs.unlink(image.relativeURL, (err) => {
+                callback();
+            });
+        } else {
+            callback();
+        }
+    }, function (err, result) {
+        next();
+    });
+});
+BongSchema.plugin(idvalidator);
 const bong = module.exports = mongoose.model("Bong",BongSchema);

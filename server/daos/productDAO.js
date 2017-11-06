@@ -21,7 +21,25 @@ function addImageURL(bong) {
 module.exports = {
     getBongs: function (reqQuery, callback) {
         var skip = 0;
-        var query = [];
+        var brandQuery = [
+            {
+                "$lookup": {
+                    "from": "brands",
+                    "localField": "brandId",
+                    "foreignField": "_id",
+                    "as": "brands"
+                }
+            },
+            {
+                "$unwind": "$brands"
+            },
+            {
+                "$addFields": {
+                    "brand": "$brands.name"
+                }
+            }
+        ];
+        var query = [].concat(brandQuery);
         var matchQuery = {
             "$match": {
             }

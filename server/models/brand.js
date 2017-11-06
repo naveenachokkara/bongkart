@@ -25,9 +25,4 @@ BrandSchema.pre('remove',function(next){
         next();
     });
 });
-BrandSchema.pre('remove',function(next){
-    fs.unlink(this.image.relativeURL, (err) => {
-        next();
-    });
-});
 const bong = module.exports = mongoose.model("Brand",BrandSchema);

@@ -29,4 +29,42 @@ export class BongService {
             });
         });
     }
+    deleteBong(id): Promise <any> {
+        return new Promise((resolve,reject) => {
+            this.http.delete(AppConfig.baseURL+'bong/'+id).subscribe(data => {
+                // Read the result field from the JSON response.
+                resolve(data);
+            },(data)=>{
+                reject(data);
+            });
+        });
+    }
+    createBong(data): Promise<any>{
+        return new Promise((resolve,reject) =>{
+            this.http.post(AppConfig.baseURL+'bong/create',data).subscribe(data =>{
+                resolve(data);
+            },(data)=>{
+                reject(data);
+            })
+        })
+    }
+    getBong(id): Promise<any> {
+        return new Promise((resolve,reject) => {
+            this.http.get(AppConfig.baseURL+'bong/'+id).subscribe(data => {
+                // Read the result field from the JSON response.
+                resolve(data);
+            },(data)=>{
+                reject(data);
+            });
+        });
+    }
+    updateBong(id, data): Promise<any> {
+        return new Promise((resolve,reject) =>{
+            this.http.put(AppConfig.baseURL+'bong/update/'+id,data).subscribe((data)=>{
+                resolve(data);
+            },(data)=>{
+                reject(data);
+            });
+        })
+    }
 }

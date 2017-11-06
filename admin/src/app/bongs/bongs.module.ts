@@ -5,11 +5,11 @@ import {CommonModule} from '@angular/common';
 import {BongsRoutingModule} from './bongs-routing.module';
 
 //Components 
-import {BongsList} from './bongsList.component';
+import {BongsList,BongDeleteConfirmModal} from './bongsList.component';
 
 @NgModule({
     imports:[CommonModule,BongsRoutingModule],
-    declarations:[BongsList]
+    declarations:[BongsList,BongDeleteConfirmModal]
 })
 
 export class BongsModule{}

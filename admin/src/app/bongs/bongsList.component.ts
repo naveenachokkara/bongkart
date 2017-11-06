@@ -6,20 +6,48 @@ import { ToastrService } from "ngx-toastr";
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { AppConfig } from '../AppConfig';
 import { saveAs } from 'file-saver/FileSaver';
+import { BsModalService  } from 'ngx-bootstrap';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+
 @Component({
     templateUrl: './bongsList.component.html'
 })
 export class BongsList {
     bongs: any;
     data: any;
+    currentBong: any;
+    bsModalRef: BsModalRef;
     @ViewChild('bongXLS') bongXLS: ElementRef;
-    constructor(private bongService: BongService, private spinnerService: Ng4LoadingSpinnerService, private toastr: ToastrService) {
+    constructor(private bongService: BongService, private spinnerService: Ng4LoadingSpinnerService, private toastr: ToastrService,private modalService: BsModalService) {
 
     }
     ngOnInit(): void {
         this.bongService.getBongs().then(bongs => {
             this.bongs = bongs;
         })
+    }
+    open(currentBong) {
+        this.currentBong = currentBong;
+        this.modalService.onHidden.subscribe((data:any)=>{
+            if(this.bsModalRef){
+                if(this.bsModalRef.content.deleteBong=="YES"){
+                    this.spinnerService.show();
+                    this.bongService.deleteBong(this.currentBong._id).then((data) => {
+                        this.toastr.success('Bong deleted successfully');
+                        this.spinnerService.hide();    
+                        this.ngOnInit();
+                    },(data)=>{
+                        this.toastr.error('Failed delete bong');
+                        this.spinnerService.hide();    
+                        this.ngOnInit();
+                    })
+                }
+            }
+            console.log(this.bsModalRef);
+            this.bsModalRef = null;
+        })
+        this.bsModalRef = this.modalService.show(BongDeleteConfirmModal);
+        this.bsModalRef.content.brand = currentBong;
     }
     onFileChange(evt: any) {
 
@@ -64,7 +92,12 @@ export class BongsList {
             }, (data) => {
                 this.bongXLS.nativeElement.value = "";
                 this.spinnerService.hide();
-                this.toastr.error('Failed to import bongs');
+                if(data && data.error && data.error.message){
+                    this.toastr.error(data.error.message);
+                } else {
+                    this.toastr.error('Failed to import bongs');
+                }
+                
             })
         };
         reader.readAsBinaryString(target.files[0]);
@@ -100,4 +133,32 @@ export class BongsList {
             this.toastr.error("Failed to export bongs");
         })
     }
+}
+
+
+@Component({
+    selector: 'bong-delete-modal',
+    template: `
+    <div class="modal-header">
+      <h4 class="modal-title">Delete Confirmation</h4>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete <b>{{bong.title}}</b> Bong ?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" (click)="handleYesOrNo('YES')">Yes</button>
+      <button class="btn btn-warning" type="button" (click)="handleYesOrNo('NO')">No</button>
+    </div>
+    `
+  })
+
+export class BongDeleteConfirmModal {
+    public bong:any = {title:""};
+    public deleteBong = "NO";
+  constructor(public bsModalRef: BsModalRef) {}
+  handleYesOrNo (reason:string){
+    this.deleteBong = reason;
+    this.bsModalRef.hide();
+  }
+
 }

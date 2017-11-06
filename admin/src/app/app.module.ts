@@ -31,7 +31,9 @@ import {BrandService} from './services/brand.service';
 import {UsersModule} from './users/users.module';
 import{UserDeleteConfirmModal} from './users/usersList.component';
 import {BrandsModule} from './brands/brands.module';
-import{BrandDeleteConfirmModal} from './brands/brandsList.component';
+import{BrandDeleteConfirmModal} from './brands/brandsList.component'
+import {BongsModule} from './bongs/bongs.module';
+import{BongDeleteConfirmModal} from './bongs/bongsList.component';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 @NgModule({
@@ -42,6 +44,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     AppRoutingModule,
     UsersModule,
     BrandsModule,
+    BongsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ChartsModule,
@@ -67,7 +70,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     UserService,
     BrandService
   ],
-  entryComponents:[UserDeleteConfirmModal,BrandDeleteConfirmModal],
+  entryComponents:[UserDeleteConfirmModal,BrandDeleteConfirmModal,BongDeleteConfirmModal],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
