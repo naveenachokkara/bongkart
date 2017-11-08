@@ -3,6 +3,7 @@ import {Routes, RouterModule} from '@angular/router';
 
 //Components 
 import {BongsList} from './bongsList.component';
+import {BongCreate} from './bongCreate.component';
 
 const routes: Routes = [
     {
@@ -19,6 +20,19 @@ const routes: Routes = [
             {
                 path:'list',
                 component: BongsList
+            },
+            {
+                path:'createBong',
+                component: BongCreate,
+                data:{
+                    title:"Create Bong"
+                }
+            },{
+                path:'updateBong/:id',
+                component: BongCreate,
+                data:{
+                    title:"Update Bong"
+                }
             }
         ]
     }

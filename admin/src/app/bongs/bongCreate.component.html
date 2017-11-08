@@ -1,0 +1,214 @@
+<div class="animated fadeIn">
+  <form [formGroup]="bongForm" class="form-horizontal">
+    <legend>Bong Create</legend>
+    <div class="card">
+      <div class="card-header">
+        <strong>Primary Information</strong>
+      </div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="brand">Tilte</label>
+          <div class="col-md-9">
+            <input type="text" formControlName="title" class="form-control" placeholder="Tilte">
+            <div *ngIf="bongForm.get('title').invalid && (bongForm.get('title').dirty ||bongForm.get('title').touched)" class="alert alert-danger">
+              <div *ngIf="bongForm.get('title').hasError('required')">Please enter your title</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="price">Price</label>
+          <div class="col-md-9">
+            <input type="number" class="form-control" formControlName="price" placeholder="Price">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="originalPrice">Original Price</label>
+          <div class="col-md-9">
+            <input type="number" class="form-control" formControlName="originalPrice" placeholder="Original Price">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="description">Description</label>
+          <div class="col-md-9">
+            <input type="text" class="form-control" formControlName="description" placeholder="Description">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="quantity">Quantity</label>
+          <div class="col-md-9">
+            <input type="number" class="form-control" formControlName="quantity" placeholder="Quantity">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <strong>Specifications</strong>
+      </div>
+      <div class="card-body">
+        <div class="card">
+          <div class="card-header">
+            <strong>General</strong>
+          </div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="brand">Brand</label>
+              <div class="col-md-9">
+                <select class="form-control" formControlName="brandId">
+                  <option *ngFor="let brand of brands" [value]="brand._id">{{brand.name}}</option>
+                </select>
+                <div *ngIf="bongForm.get('brandId').invalid && (bongForm.get('brandId').dirty ||bongForm.get('brandId').touched)" class="alert alert-danger">
+                  <div *ngIf="bongForm.get('brandId').hasError('required')">Please enter select brand</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="modelNumber">Model Number</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" bsDatepicker formControlName="modelNumber" placeholder="Model Number">
+                <div *ngIf="bongForm.get('modelNumber').invalid && (bongForm.get('modelNumber').dirty ||bongForm.get('modelNumber').touched)"
+                  class="alert alert-danger">
+                  <div *ngIf="bongForm.get('modelNumber').hasError('required')">Please enter your FunctionType</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="functionType">FunctionType</label>
+              <div class="col-md-9">
+                <input type="text" formControlName="functionType" class="form-control" placeholder="Enter functionType..">
+                <div *ngIf="bongForm.get('functionType').invalid && (bongForm.get('functionType').dirty ||bongForm.get('functionType').touched)"
+                  class="alert alert-danger">
+                  <div *ngIf="bongForm.get('functionType').hasError('required')">Please enter your FunctionType</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="material">Material</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" bsDatepicker formControlName="material" placeholder="Material">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="color">Color</label>
+              <div class="col-md-9">
+                <input type="text" formControlName="color" class="form-control" placeholder="Color">
+                <div *ngIf="bongForm.get('color').invalid && (bongForm.get('color').dirty ||bongForm.get('color').touched)" class="alert alert-danger">
+                  <div *ngIf="bongForm.get('color').hasError('required')">Please enter your Color</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <strong>Dimensions</strong>
+          </div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="jointSize">Joint Size</label>
+              <div class="col-md-9">
+                <input type="number" class="form-control" bsDatepicker formControlName="jointSize" placeholder="Joint Size">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="height">Height</label>
+              <div class="col-md-9">
+                <input type="number" formControlName="height" class="form-control" placeholder="height">
+                <div *ngIf="bongForm.get('height').invalid && (bongForm.get('height').dirty ||bongForm.get('height').touched)" class="alert alert-danger">
+                  <div *ngIf="bongForm.get('height').hasError('required')">Please enter height</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="diameter">Diameter</label>
+              <div class="col-md-9">
+                <input type="number" formControlName="diameter" class="form-control" placeholder="Diameter">
+                <div *ngIf="bongForm.get('diameter').invalid && (bongForm.get('diameter').dirty ||bongForm.get('diameter').touched)" class="alert alert-danger">
+                  <div *ngIf="bongForm.get('diameter').hasError('required')">Please enter your Diameter</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <strong>Image Upload</strong>
+          </div>
+          <div class="card-body">
+            <div class="from-group row">
+              <label class="col-md-3 form-control-label" for="diameter">Select images</label>
+              <div class="col-md-9" style="margin-bottom: 40px">
+                <input type="file" ng2FileSelect [uploader]="uploader" multiple />
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th width="50%">Name</th>
+                      <th>Size</th>
+                      <th>Progress</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of uploader.queue">
+                      <td><strong>{{ item?.file?.name }}</strong></td>
+                      <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                      <td *ngIf="uploader.isHTML5">
+                        <div class="progress" style="margin-bottom: 0;">
+                          <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                        <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                        <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                      </td>
+                      <td nowrap>
+                        <button type="button" class="btn btn-success btn-xs" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                            <span class="glyphicon glyphicon-upload"></span> Upload
+                        </button>
+                        <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
+                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                        </button>
+                        <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
+                            <span class="glyphicon glyphicon-trash"></span> Remove
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div>
+                  <div>
+                    Queue progress:
+                    <div class="progress" style="">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                    <span class="glyphicon glyphicon-upload"></span> Upload all
+                </button>
+                  <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                </button>
+                  <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                    <span class="glyphicon glyphicon-trash"></span> Remove all
+                </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button type="submit" class="btn btn-sm btn-primary" [disabled]="bongForm.invalid || bongForm.pending" (click)="createBong()"
+        [hidden]="isUpdateBong"> Create</button>
+      <button type="submit" class="btn btn-sm btn-primary" [disabled]="bongForm.invalid || bongForm.pending" [hidden]="!isUpdateBong"
+        (click)="updateBong()"> Update</button>
+      <button type="button" class="btn btn-sm btn-secondary" routerLinkActive="active" [routerLink]="['/users/list']" [hidden]="!isUpdateBong"> Cancel</button>
+      <button type="reset" class="btn btn-sm btn-danger" (click)="revert()" [disabled]="bongForm.pristine" [hidden]="isUpdateBong"><i class="fa fa-ban"></i> Reset</button>
+    </div>
+  </form>
+</div>

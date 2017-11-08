@@ -26,7 +26,7 @@ const routes: Routes = [
                 path:'createBrand',
                 component: BrandCreate,
                 data:{
-                    title:"Create User"
+                    title:"Create Brand"
                 }
             },{
                 path:'updateBrand/:id',

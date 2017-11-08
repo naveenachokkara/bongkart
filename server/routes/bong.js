@@ -99,7 +99,7 @@ router.get('/home', function (req, res) {
 });
 
 router.get('/:id', (req, res, next) => {
-    bong.find({ _id: req.params.id }, (err, bong) => {
+    bong.findOne({ _id: req.params.id }, (err, bong) => {
         if (err) {
             res.json({ status: 'error' });
         }
