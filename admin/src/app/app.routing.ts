@@ -30,6 +30,9 @@ export const routes: Routes = [
       },{
         path: 'brands',
         loadChildren: './brands/brands.module#BrandsModule'
+      },{
+        path: 'banners',
+        loadChildren: './banners/banners.module#BannersModule'
       }
     ]
   }

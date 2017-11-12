@@ -3,36 +3,13 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import {AppConfig} from '../AppConfig';
 @Injectable()
-export class BongService {
+export class BannerService {
     constructor(private http: HttpClient) {
 
     }
-    getBongs(query:any): Promise<any> {
-        query = query?query:null;
+    getBanners(): Promise<any> {
         return new Promise((resolve,reject) => {
-            this.http.post(AppConfig.baseURL+'bong/list', query).subscribe(data => {
-                // Read the result field from the JSON response.
-                console.log(data);
-                resolve(data);
-            },(data)=>{
-                reject(data);
-            });
-        });
-    }
-    uploadBongs(bongs): Promise<any> {
-        return new Promise((resolve,reject) => {
-            this.http.post(AppConfig.baseURL+'bong/bulkUpload', bongs).subscribe(data => {
-                // Read the result field from the JSON response.
-                console.log(data);
-                resolve(data);
-            },(data)=>{
-                reject(data);
-            });
-        });
-    }
-    deleteBong(id): Promise <any> {
-        return new Promise((resolve,reject) => {
-            this.http.delete(AppConfig.baseURL+'bong/'+id).subscribe(data => {
+            this.http.get(AppConfig.baseURL+'banner/list').subscribe(data => {
                 // Read the result field from the JSON response.
                 resolve(data);
             },(data)=>{
@@ -40,18 +17,28 @@ export class BongService {
             });
         });
     }
-    createBong(data): Promise<any>{
+    deleteBanner(id): Promise <any> {
+        return new Promise((resolve,reject) => {
+            this.http.delete(AppConfig.baseURL+'banner/'+id).subscribe(data => {
+                // Read the result field from the JSON response.
+                resolve(data);
+            },(data)=>{
+                reject(data);
+            });
+        });
+    }
+    createBanner(data): Promise<any>{
         return new Promise((resolve,reject) =>{
-            this.http.post(AppConfig.baseURL+'bong/create',data).subscribe(data =>{
+            this.http.post(AppConfig.baseURL+'banner',data).subscribe(data =>{
                 resolve(data);
             },(data)=>{
                 reject(data);
             })
         })
     }
-    getBong(id): Promise<any> {
+    getBanner(id): Promise<any> {
         return new Promise((resolve,reject) => {
-            this.http.get(AppConfig.baseURL+'bong/'+id).subscribe(data => {
+            this.http.get(AppConfig.baseURL+'banner/'+id).subscribe(data => {
                 // Read the result field from the JSON response.
                 resolve(data);
             },(data)=>{
@@ -59,13 +46,24 @@ export class BongService {
             });
         });
     }
-    updateBong(id, data): Promise<any> {
+    updateBanner(id, data): Promise<any> {
         return new Promise((resolve,reject) =>{
-            this.http.put(AppConfig.baseURL+'bong/update/'+id,data).subscribe((data)=>{
+            this.http.put(AppConfig.baseURL+'banner/'+id,data).subscribe(data =>{
                 resolve(data);
             },(data)=>{
                 reject(data);
             });
         })
     }
+    uploadBannerLogo(fileToUpload: File) {
+        const formData = new FormData();
+        formData.append('file', fileToUpload, fileToUpload.name);   
+        return new Promise((resolve,reject) =>{
+            this.http.post(AppConfig.baseURL+'upload',formData).subscribe(data =>{
+                resolve(data);
+            },(data)=>{
+                reject(data);
+            });
+        });
+   }
 }

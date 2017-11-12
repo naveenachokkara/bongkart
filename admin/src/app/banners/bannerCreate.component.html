@@ -1,0 +1,49 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-header">
+          <strong>Banner</strong> Form
+        </div>
+        <div class="card-body">
+          <form [formGroup]="bannerForm" class="form-horizontal">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="brnadId" >Brand</label>
+              <div class="col-md-9">
+                <select (change)="onBrandSelect($event)" class="form-control" formControlName="brandId">
+                  <option *ngFor="let brand of brands" [value]="brand._id">{{brand.name}}</option>
+                </select>
+                <div *ngIf="bannerForm.get('brandId').invalid && (bannerForm.get('brandId').dirty ||bannerForm.get('brandId').touched)" class="alert alert-danger">
+                  <div *ngIf="bannerForm.get('brandId').hasError('required')">Please enter select brand</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="brandName" >Item</label>
+              <div class="col-md-9">
+                <select  class="form-control" formControlName="item">
+                  <option value="all">ALL</option>
+                  <option *ngFor="let bong of bongs" [value]="bong._id">{{bong.title}}</option>
+                </select>
+                <div *ngIf="bannerForm.get('item').invalid && (bannerForm.get('item').dirty ||bannerForm.get('item').touched)" class="alert alert-danger">
+                  <div *ngIf="bannerForm.get('item').hasError('required')">Please enter select brand</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="bannerImage">Logo</label>
+              <div class="col-md-9">
+                 <input type="file" (change)="onFileChange($event)" multiple="false" #bannerImage/>
+                <!--<div *ngIf="userForm.get('facebookId').invalid && (userForm.get('facebookId').dirty ||userForm.get('facebookId').touched)" class="alert alert-danger">
+                  <div *ngIf="userForm.get('facebookId').hasError('required')">Please enter your facebook Id</div>
+                </div>-->
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="bannerForm.invalid || bannerForm.pending" (click)="createBanner()" [hidden]="isUpdateBrand"> Submit</button>
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="bannerForm.invalid || bannerForm.pending" (click)="updateBanner()" [hidden]="!isUpdateBrand"> Update</button>
+          <button type="button" class="btn btn-sm btn-secondary" routerLinkActive="active" [routerLink]="['/banners/list']" [hidden]="!isUpdateBanner"> Cancel</button>
+          <button type="reset" class="btn btn-sm btn-danger" (click)="revert()" [disabled]="bannerForm.pristine" [hidden]="isUpdateBanner"><i class="fa fa-ban"></i> Reset</button>
+        </div>
+      </div>
+</div>

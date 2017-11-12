@@ -71,6 +71,12 @@ module.exports = {
             if (reqQuery.matchBy && reqQuery.matchBy.brands && Array.isArray(reqQuery.matchBy.brands) && reqQuery.matchBy.brands.length) {
                 matchQuery.$match.brand = { "$in": reqQuery.matchBy.brands };
             }
+            if (reqQuery.matchBy && reqQuery.matchBy.brandId ) {
+                matchQuery.$match.brandId = new ObjectId(reqQuery.matchBy.brandId);
+            }
+            if (reqQuery.matchBy && reqQuery.matchBy.bongId) {
+                matchQuery.$match._id = new ObjectId(reqQuery.matchBy.bongId);
+            }
             if (Object.keys(matchQuery.$match).length > 0) {
                 query.push(matchQuery);
             }

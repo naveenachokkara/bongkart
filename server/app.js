@@ -17,6 +17,8 @@ const cart = require('./routes/cart');
 const address = require('./routes/address');
 const whishList = require('./routes/whishlist');
 const brand = require('./routes/brand');
+const banner = require('./routes/banner');
+
 //require multer for the file uploads
 const multer = require('multer');
 // set the directory for the uploads to the uploaded to
@@ -89,6 +91,7 @@ app.use('/cart',cart);
 app.use('/address',address);
 app.use('/whishList',whishList);
 app.use('/brand',brand);
+app.use('/banner',banner);
 
 app.listen(port,() => {
     console.log('server is connected at port '+port);

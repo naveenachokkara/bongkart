@@ -22,7 +22,7 @@ export class BongsList {
 
     }
     ngOnInit(): void {
-        this.bongService.getBongs().then(bongs => {
+        this.bongService.getBongs(null).then(bongs => {
             this.bongs = bongs;
         })
     }
@@ -104,7 +104,7 @@ export class BongsList {
     }
     exportBongs() {
         this.spinnerService.show();
-        this.bongService.getBongs().then((bongs) => {
+        this.bongService.getBongs(null).then((bongs) => {
             _.each(bongs, function (bong) {
                 var images = _.map(bong.images, function (image) { return image.relativeURL ? AppConfig.baseURL + image.relativeURL : image.imageUrl })
                 bong.images = images.join(',');

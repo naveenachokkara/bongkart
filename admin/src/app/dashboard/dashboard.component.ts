@@ -14,8 +14,7 @@ export class DashboardComponent {
 
   }
   ngOnInit(): void {
-    this.bongService.getBongs().then(bongs => {
-      console.log(bongs);
+    this.bongService.getBongs(null).then(bongs => {
       this.bongs = bongs
     });
     this.userService.getUsers().then(users => {
@@ -23,5 +22,4 @@ export class DashboardComponent {
       this.users = users;
     })
   }
-
 }

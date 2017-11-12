@@ -15,6 +15,7 @@ const downloader = require('image-downloader');
 const uuid = require('uuid');
 const config = require('../configuration/config.json');
 const productDAO = require('../daos/productDAO');
+const bannerDAO = require('../daos/bannerDAO');
 const Brand = require('../models/brand');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -83,6 +84,11 @@ router.get('/home', function (req, res) {
             productDAO.getBongs(reqQuery, (err, bongs) => {
                 done(err, bongs);
             });
+        },
+        banners: function(done){
+          bannerDAO.getBanners((err,banners)=>{
+              done(err,banners);
+          })  
         },
         brands: function(done){
             Brand.find({},function(err,brands){

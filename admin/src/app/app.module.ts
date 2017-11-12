@@ -28,10 +28,14 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
 import {BongService} from './services/bong.service';
 import {UserService} from './services/user.service';
 import {BrandService} from './services/brand.service';
+import {BannerService} from './services/banner.service';
+
 import {UsersModule} from './users/users.module';
 import{UserDeleteConfirmModal} from './users/usersList.component';
 import {BrandsModule} from './brands/brands.module';
 import{BrandDeleteConfirmModal} from './brands/brandsList.component'
+import {BannersModule} from './banners/banners.module';
+import{BannerDeleteConfirmModal} from './banners/bannersList.component'
 import {BongsModule} from './bongs/bongs.module';
 import{BongDeleteConfirmModal} from './bongs/bongsList.component';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
@@ -44,6 +48,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     AppRoutingModule,
     UsersModule,
     BrandsModule,
+    BannersModule,
     BongsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
@@ -68,9 +73,10 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
   },
     BongService,
     UserService,
-    BrandService
+    BrandService,
+    BannerService
   ],
-  entryComponents:[UserDeleteConfirmModal,BrandDeleteConfirmModal,BongDeleteConfirmModal],
+  entryComponents:[UserDeleteConfirmModal,BrandDeleteConfirmModal,BongDeleteConfirmModal,BannerDeleteConfirmModal],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
