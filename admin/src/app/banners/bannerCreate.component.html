@@ -24,7 +24,7 @@
                   <option *ngFor="let bong of bongs" [value]="bong._id">{{bong.title}}</option>
                 </select>
                 <div *ngIf="bannerForm.get('item').invalid && (bannerForm.get('item').dirty ||bannerForm.get('item').touched)" class="alert alert-danger">
-                  <div *ngIf="bannerForm.get('item').hasError('required')">Please enter select brand</div>
+                  <div *ngIf="bannerForm.get('item').hasError('required')">Please enter select item</div>
                 </div>
               </div>
             </div>
