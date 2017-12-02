@@ -139,7 +139,7 @@ router.delete('/removeItem', (req, res) => {
             function (err, removeInfo) {
                 if (err) {
                     console.log(err);
-                    res.json({ "status": "error" });
+                    res.status(400).json({ "status": "error" });
                 } else {
                     res.json({ "status": "success", "itemId": reqData.itemId });
                 }
@@ -154,13 +154,13 @@ router.get('/details', (req, res) => {
     if (req.query.deviceId || req.query.userId) {
         cartDAO.getCart(req.query, function (err, cart) {
             if (err) {
-                res.json({ "status": "error" });
+                res.status(400).json({ "status": "error" });
             } else {
                 res.json(cart);
             }
         });
     } else {
-        res.json({ "status": "error", "message": "invalid inputs" });
+        res.status(400).json({ "status": "error", "message": "invalid inputs" });
     }
 });
 
@@ -178,7 +178,7 @@ router.post('/mergeCarts', function (req, res) {
                 });
             }, function (err, results) {
                 if (err) {
-                    res.json({ "status": "error", "message": "Failed to merge carts" });
+                    res.status(400).json({ "status": "error", "message": "Failed to merge carts" });
                 } else {
                     if (results.userCart && results.deviceCart) {
                         _.each(results.deviceCart.items, function (item) {
@@ -207,7 +207,7 @@ router.post('/mergeCarts', function (req, res) {
                             function (err, cart) {
                                 if (err) {
                                     console.log(err);
-                                    res.json({ "status": "error", "message": "Failed to merge carts" });
+                                    res.status(400).json({ "status": "error", "message": "Failed to merge carts" });
                                 } else {
                                     Cart.findOneAndRemove(
                                         {
@@ -239,7 +239,7 @@ router.post('/mergeCarts', function (req, res) {
                             }, function (err, cart) {
                                 if (err) {
                                     console.log(err);
-                                    res.json({ "status": "error", "message": "Failed to merge carts" });
+                                    res.status(400).json({ "status": "error", "message": "Failed to merge carts" });
                                 } else {
                                     Cart.findOneAndRemove(
                                         {
@@ -256,12 +256,45 @@ router.post('/mergeCarts', function (req, res) {
                                 }
                             });
                     } else {
-                        res.json({ "status": "error", "message": "invalid inputs" });
+                        res.status(400).json({ "status": "error", "message": "invalid inputs" });
                     }
                 }
             })
     } else {
-        res.json({ "status": "error", "message": "invalid inputs" });
+        res.status(400).json({ "status": "error", "message": "invalid inputs" });
     }
 });
+
+router.get('/itemDetails',function(req,res){
+    var query = {};
+    
+    if(req.query.userId){
+        query["userId"] = req.query.userId;
+    }
+    if(req.query.deviceId){
+        query.deviceId = req.query.deviceId;
+    }
+    if((query.deviceId || query.userId) && req.query.itemId){
+        console.log(query);
+        Cart.findOne(query, function (err, cart) {
+            if (err) {
+                res.status(400).json({ "status": "error", "message": "Failed to get item details","error":err });
+            } else {
+                console.log(cart);
+                if(cart){
+                    var item = _.find(cart.items,function(item){return item.bongId.equals(req.query.itemId)});
+                    if(item){
+                        res.json(item);
+                    } else {
+                        res.status(404).json({ "status": "error", "message": "item not found" });    
+                    }
+                } else {
+                    res.status(404).json({ "status": "error", "message": "Cart not found" });
+                }
+            }
+        });
+    } else {
+        res.status(400).json({ "status": "error", "message": "invalid inputs" });
+    }
+})
 module.exports = router;
