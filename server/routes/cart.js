@@ -275,12 +275,10 @@ router.get('/itemDetails',function(req,res){
         query.deviceId = req.query.deviceId;
     }
     if((query.deviceId || query.userId) && req.query.itemId){
-        console.log(query);
         Cart.findOne(query, function (err, cart) {
             if (err) {
                 res.status(400).json({ "status": "error", "message": "Failed to get item details","error":err });
             } else {
-                console.log(cart);
                 if(cart){
                     var item = _.find(cart.items,function(item){return item.bongId.equals(req.query.itemId)});
                     if(item){
